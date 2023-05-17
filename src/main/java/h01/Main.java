@@ -87,6 +87,7 @@ public class Main {
         World.setVisible(true);
         robots.add(new CleaningRobot(0, 0, Direction.UP, 0));
         robots.add(new Offender1(World.getWidth() - 1, 0, Direction.UP, 5 * World.getWidth() * World.getHeight()));
+        robots.add(new Offender2(World.getWidth() - 1, World.getHeight() - 1, Direction.UP, 2 * World.getWidth() * World.getHeight()));
         MazeGenerator.generateMaze();
         World.getGlobalWorld().setFieldColor(0, World.getHeight() - 1, Color.YELLOW);
     }
