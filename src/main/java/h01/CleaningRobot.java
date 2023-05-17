@@ -20,7 +20,7 @@ public class CleaningRobot extends Robot implements Cleaner {
         if (shouldPutCoins /*&& !isOnACoin()*/ && hasAnyCoins()) {
             putCoin();
         }
-        if (shouldPickCoins && isOnACoin()) {
+        if (shouldPickCoins && isOnACoin() && getNumberOfCoins() < 25) {
             pickCoin();
         }
         if (direction >= 0) {

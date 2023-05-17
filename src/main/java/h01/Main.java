@@ -4,6 +4,7 @@ import fopbot.Direction;
 import fopbot.Robot;
 import fopbot.World;
 
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashSet;
@@ -85,8 +86,9 @@ public class Main {
         World.setDelay(0);
         World.setVisible(true);
         robots.add(new CleaningRobot(0, 0, Direction.UP, 0));
-        robots.add(new Offender1(World.getWidth() - 1, 0, Direction.UP, 50));
+        robots.add(new Offender1(World.getWidth() - 1, 0, Direction.UP, 5 * World.getWidth() * World.getHeight()));
         MazeGenerator.generateMaze();
+        World.getGlobalWorld().setFieldColor(0, World.getHeight() - 1, Color.YELLOW);
     }
 
     private void handleKeyboardEvents() {
@@ -110,8 +112,8 @@ public class Main {
 
     private void updateKeysPressed() {
         direction.set(Optional.ofNullable(Utils.getDirection(World.getGlobalWorld().getInputHandler().getKeysPressed()))
-                          .map(Enum::ordinal)
-                          .orElse(-1));
+            .map(Enum::ordinal)
+            .orElse(-1));
         shouldPutCoins.set(World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_SPACE));
         shouldPickCoins.set(World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_R));
     }
