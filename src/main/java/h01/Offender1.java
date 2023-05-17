@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Offender1 extends Robot implements Offender {
 
-    private final int updateDelay = 10;
+    private final int updateDelay = 5;
     private int lastUpdate = 0;
 
     public Offender1(int x, int y, Direction direction, int numberOfCoins) {
@@ -32,9 +32,9 @@ public class Offender1 extends Robot implements Offender {
             lastUpdate = 0;
         }
         // lay random amount of coins between 1 and 5
-        if (!isOnACoin()) {
+        if (!isOnACoin() || Utils.getCoinAmount(getX(), getY()) < 10) {
             for (int i = 0; i < Utils.getRandomInteger(1, 5); i++) {
-                if (!hasAnyCoins()) {
+                if (!hasAnyCoins() || Utils.getCoinAmount(getX(), getY()) >= 10) {
                     break;
                 }
                 putCoin();

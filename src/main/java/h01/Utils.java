@@ -1,5 +1,6 @@
 package h01;
 
+import fopbot.Coin;
 import fopbot.Direction;
 import fopbot.World;
 
@@ -65,7 +66,9 @@ public class Utils {
         return (int) World.getGlobalWorld().getAllFieldEntities().stream()
             .filter(e -> e.getX() == x && e.getY() == y)
             .filter(e -> e instanceof fopbot.Coin)
-            .count();
+            .map(e -> (Coin) e)
+            .mapToInt(Coin::getCount)
+            .sum();
     }
 
     /**
