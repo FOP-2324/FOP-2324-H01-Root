@@ -56,10 +56,10 @@ public class GameInputHandler {
                 .map(Enum::ordinal)
                 .orElse(-1)
         );
-        this.shouldPutCoins.set(
+        this.shouldPickCoins.set(
             World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_SPACE)
         );
-        this.shouldPickCoins.set(
+        this.shouldPutCoins.set(
             World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_R)
         );
     }
