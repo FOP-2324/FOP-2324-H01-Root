@@ -41,24 +41,41 @@ public class Offender2 extends Robot implements Offender {
             }
         }
         // get valid paths
-        List<Direction> validPaths = new ArrayList<>();
+        Direction left = null, back = null, right = null, front = null;
+        int validPathsCount = 0;
         for (int i = 0; i < 4; i++) {
             turnLeft();
             if (isFrontClear()) {
-                validPaths.add(getDirection());
+                if (i == 0) {
+                    left = getDirection();
+                } else if (i == 1) {
+                    back = getDirection();
+                } else if (i == 2) {
+                    right = getDirection();
+                } else {
+                    front = getDirection();
+                }
+                validPathsCount++;
             }
         }
-        if (validPaths.isEmpty()) {
+        // check if there are any valid paths
+        if (validPathsCount == 0) {
             return;
         }
-        // orient on right wall
-        var direction = getDirection();
-        while (getDirection() != validPaths.get(validPaths.size()-1)) {
-            turnLeft();
+        // orient on left wall
+        Direction direction = null;
+        if(left!=null){
+            direction = left;
+        } else if(front!=null){
+            direction = front;
+        } else if(right!=null){
+            direction = right;
+        } else if(back!=null){
+            direction = back;
         }
-        move();
         while (getDirection() != direction) {
             turnLeft();
         }
+        move();
     }
 }
