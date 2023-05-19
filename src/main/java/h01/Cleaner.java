@@ -11,5 +11,5 @@ public interface Cleaner {
      * @param shouldPutCoins  if {@code true} the robot should put a coin on the current field.
      * @param shouldPickCoins if {@code true} the robot should pick a coin from the current field.
      */
-    public void handleInput(int direction, boolean shouldPutCoins, boolean shouldPickCoins);
+    void handleInput(int direction, boolean shouldPutCoins, boolean shouldPickCoins);
 }

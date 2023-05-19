@@ -20,16 +20,16 @@ public class Utils {
      * @param keysPressed the keys pressed
      * @return the direction or null if no direction is pressed
      */
-    public static Direction getDirection(Set<Integer> keysPressed) {
-        Map<Direction, List<Integer>> directionKeys = Map.of(
+    public static Direction getDirection(final Set<Integer> keysPressed) {
+        final Map<Direction, List<Integer>> directionKeys = Map.of(
             Direction.UP, List.of(java.awt.event.KeyEvent.VK_UP, java.awt.event.KeyEvent.VK_W),
             Direction.LEFT, List.of(java.awt.event.KeyEvent.VK_LEFT, java.awt.event.KeyEvent.VK_A),
             Direction.DOWN, List.of(java.awt.event.KeyEvent.VK_DOWN, java.awt.event.KeyEvent.VK_S),
             Direction.RIGHT, List.of(java.awt.event.KeyEvent.VK_RIGHT, java.awt.event.KeyEvent.VK_D)
         );
-        Set<Direction> pressedDirections = new HashSet<>();
-        for (Direction direction : directionKeys.keySet()) {
-            for (Integer key : directionKeys.get(direction)) {
+        final Set<Direction> pressedDirections = new HashSet<>();
+        for (final Direction direction : directionKeys.keySet()) {
+            for (final Integer key : directionKeys.get(direction)) {
                 if (keysPressed.contains(key)) {
                     pressedDirections.add(direction);
                 }
@@ -51,7 +51,7 @@ public class Utils {
      * @param max inclusive maximum (must be greater than min)
      * @return a random integer between min and max (both inclusive)
      */
-    public static int getRandomInteger(int min, int max) {
+    public static int getRandomInteger(final int min, final int max) {
         return min + rnd.nextInt(max - min + 1);
     }
 
@@ -62,10 +62,10 @@ public class Utils {
      * @param y the y coordinate of field to check
      * @return the amount of coins at the given position
      */
-    public static int getCoinAmount(int x, int y) {
-        return (int) World.getGlobalWorld().getAllFieldEntities().stream()
+    public static int getCoinAmount(final int x, final int y) {
+        return World.getGlobalWorld().getAllFieldEntities().stream()
             .filter(e -> e.getX() == x && e.getY() == y)
-            .filter(e -> e instanceof fopbot.Coin)
+            .filter(e -> e instanceof Coin)
             .map(e -> (Coin) e)
             .mapToInt(Coin::getCount)
             .sum();
@@ -78,7 +78,7 @@ public class Utils {
      * @param y the y coordinate to check
      * @return {@code true} if the given coordinate is a valid coordinate in the current world
      */
-    public static boolean isValidCoordinate(int x, int y) {
+    public static boolean isValidCoordinate(final int x, final int y) {
         return x >= 0 && x < World.getWidth() && y >= 0 && y < World.getHeight();
     }
 }

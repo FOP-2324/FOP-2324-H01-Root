@@ -9,7 +9,7 @@ public class Contaminant2 extends Robot implements Contaminant {
     private final int updateDelay = 3;
     private int lastUpdate = 0;
 
-    public Contaminant2(int x, int y, Direction direction, int numberOfCoins) {
+    public Contaminant2(final int x, final int y, final Direction direction, final int numberOfCoins) {
         super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_ORANGE);
     }
 
@@ -22,11 +22,11 @@ public class Contaminant2 extends Robot implements Contaminant {
         if (isTurnedOff()) {
             return;
         }
-        if (lastUpdate < updateDelay) {
-            lastUpdate++;
+        if (this.lastUpdate < this.updateDelay) {
+            this.lastUpdate++;
             return;
         } else {
-            lastUpdate = 0;
+            this.lastUpdate = 0;
         }
         // lay 2 coins
         if (!isOnACoin() || Utils.getCoinAmount(getX(), getY()) < 2) {

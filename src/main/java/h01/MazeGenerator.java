@@ -18,10 +18,10 @@ public class MazeGenerator {
      */
     public static void generateMaze() {
         // Create a 2D array to keep track of visited fields
-        var visited = new boolean[World.getWidth()][World.getHeight()];
+        final var visited = new boolean[World.getWidth()][World.getHeight()];
 
         // Create a stack to track the visited cells
-        var stack = new ArrayDeque<Point>();
+        final var stack = new ArrayDeque<Point>();
 
         // Start the maze generation from the top-left corner (0, 0)
         var current = new Point(0, 0);
@@ -31,14 +31,14 @@ public class MazeGenerator {
         // Continue until all cells have been visited
         while (!stack.isEmpty()) {
             // Get the unvisited neighboring cells of the current cell
-            var neighbours = getNeighbours(current)
+            final var neighbours = getNeighbours(current)
                 .stream()
                 .filter(p -> !visited[p.x][p.y])
                 .toList();
 
             if (!neighbours.isEmpty()) {
                 // Choose a random neighboring cell
-                var next = neighbours.get(new Random().nextInt(neighbours.size()));
+                final var next = neighbours.get(new Random().nextInt(neighbours.size()));
                 visited[next.x][next.y] = true;
 
                 // Place walls inside the maze grid
@@ -67,8 +67,8 @@ public class MazeGenerator {
      * @param p The cell coordinates
      * @return List of neighboring cells
      */
-    private static List<Point> getNeighbours(Point p) {
-        var neighbours = new ArrayList<Point>();
+    private static List<Point> getNeighbours(final Point p) {
+        final var neighbours = new ArrayList<Point>();
         int dx = 1;
         int dy = 0;
 
@@ -80,7 +80,7 @@ public class MazeGenerator {
             }
 
             // Rotate 90 degrees clockwise for the next direction
-            int tmp = dx;
+            final int tmp = dx;
             dx = -dy;
             dy = tmp;
         }

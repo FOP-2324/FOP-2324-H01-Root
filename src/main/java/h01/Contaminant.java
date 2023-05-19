@@ -7,5 +7,5 @@ public interface Contaminant {
     /**
      * Performs a predefined movement cycle.
      */
-    public void doMove();
+    void doMove();
 }

@@ -5,12 +5,12 @@ import fopbot.Robot;
 
 public class CleaningRobot extends Robot implements Cleaner {
 
-    public CleaningRobot(int x, int y, Direction direction, int numberOfCoins) {
+    public CleaningRobot(final int x, final int y, final Direction direction, final int numberOfCoins) {
         super(x, y, direction, numberOfCoins);
     }
 
     @Override
-    public void handleInput(int direction, boolean shouldPutCoins, boolean shouldPickCoins) {
+    public void handleInput(final int direction, final boolean shouldPutCoins, final boolean shouldPickCoins) {
         // System.out.printf(
         //     "direction: %d, shouldPutCoins: %b, shouldPickCoins: %b\n",
         //     direction,

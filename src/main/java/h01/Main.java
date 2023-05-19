@@ -32,7 +32,7 @@ public class Main {
      *
      * @param args program arguments, currently ignored
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         new Main().run();
     }
 
@@ -43,13 +43,13 @@ public class Main {
     }
 
     private void startGameLoop() {
-        TimerTask gameLoopTask = new TimerTask() {
+        final TimerTask gameLoopTask = new TimerTask() {
             @Override
             public void run() {
-                for (Robot robot : robots) {
-                    if (robot instanceof Cleaner r) {
-                        r.handleInput(direction.get(), shouldPutCoins.get(), shouldPickCoins.get());
-                    } else if (robot instanceof Contaminant r) {
+                for (final Robot robot : Main.this.robots) {
+                    if (robot instanceof final Cleaner r) {
+                        r.handleInput(Main.this.direction.get(), Main.this.shouldPutCoins.get(), Main.this.shouldPickCoins.get());
+                    } else if (robot instanceof final Contaminant r) {
                         r.doMove();
                     }
                 }
@@ -57,14 +57,14 @@ public class Main {
                 checkWinCondition();
             }
         };
-        gameLoopTimer.scheduleAtFixedRate(gameLoopTask, 0, 100);
+        this.gameLoopTimer.scheduleAtFixedRate(gameLoopTask, 0, 100);
     }
 
     private void checkWinCondition() {
         // If all Offenders are turned off, the game is won
-        if (robots.stream().filter(r -> r instanceof Contaminant).allMatch(Robot::isTurnedOff)) {
+        if (this.robots.stream().filter(r -> r instanceof Contaminant).allMatch(Robot::isTurnedOff)) {
             System.out.println("Cleaning robot won!");
-            gameLoopTimer.cancel();
+            this.gameLoopTimer.cancel();
         }
         // if more than 50% of all fields are dirty, the game is lost
         int dirtyFields = 0;
@@ -77,7 +77,7 @@ public class Main {
         }
         if (dirtyFields > World.getWidth() * World.getHeight() / 2) {
             System.out.println("Offenders won!");
-            gameLoopTimer.cancel();
+            this.gameLoopTimer.cancel();
         }
     }
 
@@ -85,9 +85,9 @@ public class Main {
         World.setSize(10, 10);
         World.setDelay(0);
         World.setVisible(true);
-        robots.add(new CleaningRobot(0, 0, Direction.UP, 0));
-        robots.add(new Contaminant1(World.getWidth() - 1, 0, Direction.UP, 5 * World.getWidth() * World.getHeight()));
-        robots.add(new Contaminant2(World.getWidth() - 1, World.getHeight() - 1, Direction.UP, 2 * World.getWidth() * World.getHeight()));
+        this.robots.add(new CleaningRobot(0, 0, Direction.UP, 0));
+        this.robots.add(new Contaminant1(World.getWidth() - 1, 0, Direction.UP, 5 * World.getWidth() * World.getHeight()));
+        this.robots.add(new Contaminant2(World.getWidth() - 1, World.getHeight() - 1, Direction.UP, 2 * World.getWidth() * World.getHeight()));
         MazeGenerator.generateMaze();
         World.getGlobalWorld().setFieldColor(0, World.getHeight() - 1, Color.YELLOW);
     }
@@ -95,27 +95,27 @@ public class Main {
     private void handleKeyboardEvents() {
         World.getGlobalWorld().getInputHandler().addListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void keyTyped(final KeyEvent e) {
                 updateKeysPressed();
             }
 
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void keyPressed(final KeyEvent e) {
                 updateKeysPressed();
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void keyReleased(final KeyEvent e) {
                 updateKeysPressed();
             }
         });
     }
 
     private void updateKeysPressed() {
-        direction.set(Optional.ofNullable(Utils.getDirection(World.getGlobalWorld().getInputHandler().getKeysPressed()))
+        this.direction.set(Optional.ofNullable(Utils.getDirection(World.getGlobalWorld().getInputHandler().getKeysPressed()))
             .map(Enum::ordinal)
             .orElse(-1));
-        shouldPutCoins.set(World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_SPACE));
-        shouldPickCoins.set(World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_R));
+        this.shouldPutCoins.set(World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_SPACE));
+        this.shouldPickCoins.set(World.getGlobalWorld().getInputHandler().getKeysPressed().contains(java.awt.event.KeyEvent.VK_R));
     }
 }

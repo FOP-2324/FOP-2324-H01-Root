@@ -12,7 +12,7 @@ public class Contaminant1 extends Robot implements Contaminant {
     private final int updateDelay = 5;
     private int lastUpdate = 0;
 
-    public Contaminant1(int x, int y, Direction direction, int numberOfCoins) {
+    public Contaminant1(final int x, final int y, final Direction direction, final int numberOfCoins) {
         super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_ORANGE);
     }
 
@@ -25,11 +25,11 @@ public class Contaminant1 extends Robot implements Contaminant {
         if (isTurnedOff()) {
             return;
         }
-        if (lastUpdate < updateDelay) {
-            lastUpdate++;
+        if (this.lastUpdate < this.updateDelay) {
+            this.lastUpdate++;
             return;
         } else {
-            lastUpdate = 0;
+            this.lastUpdate = 0;
         }
         // lay random amount of coins between 1 and 5
         if (!isOnACoin() || Utils.getCoinAmount(getX(), getY()) < 10) {
@@ -41,7 +41,7 @@ public class Contaminant1 extends Robot implements Contaminant {
             }
         }
         // get valid paths
-        List<Direction> validPaths = new ArrayList<>();
+        final List<Direction> validPaths = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             turnLeft();
             if (isFrontClear()) {
@@ -52,7 +52,7 @@ public class Contaminant1 extends Robot implements Contaminant {
         if (validPaths.isEmpty()) {
             return;
         }
-        Direction randomPath = validPaths.get(Utils.getRandomInteger(0, validPaths.size() - 1));
+        final Direction randomPath = validPaths.get(Utils.getRandomInteger(0, validPaths.size() - 1));
         while (getDirection() != randomPath) {
             turnLeft();
         }
