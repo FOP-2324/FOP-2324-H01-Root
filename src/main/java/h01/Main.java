@@ -49,7 +49,7 @@ public class Main {
                 for (Robot robot : robots) {
                     if (robot instanceof Cleaner r) {
                         r.handleInput(direction.get(), shouldPutCoins.get(), shouldPickCoins.get());
-                    } else if (robot instanceof Offender r) {
+                    } else if (robot instanceof Contaminant r) {
                         r.doMove();
                     }
                 }
@@ -62,7 +62,7 @@ public class Main {
 
     private void checkWinCondition() {
         // If all Offenders are turned off, the game is won
-        if (robots.stream().filter(r -> r instanceof Offender).allMatch(Robot::isTurnedOff)) {
+        if (robots.stream().filter(r -> r instanceof Contaminant).allMatch(Robot::isTurnedOff)) {
             System.out.println("Cleaning robot won!");
             gameLoopTimer.cancel();
         }
@@ -86,8 +86,8 @@ public class Main {
         World.setDelay(0);
         World.setVisible(true);
         robots.add(new CleaningRobot(0, 0, Direction.UP, 0));
-        robots.add(new Offender1(World.getWidth() - 1, 0, Direction.UP, 5 * World.getWidth() * World.getHeight()));
-        robots.add(new Offender2(World.getWidth() - 1, World.getHeight() - 1, Direction.UP, 2 * World.getWidth() * World.getHeight()));
+        robots.add(new Contaminant1(World.getWidth() - 1, 0, Direction.UP, 5 * World.getWidth() * World.getHeight()));
+        robots.add(new Contaminant2(World.getWidth() - 1, World.getHeight() - 1, Direction.UP, 2 * World.getWidth() * World.getHeight()));
         MazeGenerator.generateMaze();
         World.getGlobalWorld().setFieldColor(0, World.getHeight() - 1, Color.YELLOW);
     }

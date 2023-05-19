@@ -7,12 +7,12 @@ import fopbot.RobotFamily;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Offender1 extends Robot implements Offender {
+public class Contaminant1 extends Robot implements Contaminant {
 
     private final int updateDelay = 5;
     private int lastUpdate = 0;
 
-    public Offender1(int x, int y, Direction direction, int numberOfCoins) {
+    public Contaminant1(int x, int y, Direction direction, int numberOfCoins) {
         super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_ORANGE);
     }
 
