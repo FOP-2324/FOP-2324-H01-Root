@@ -1,4 +1,4 @@
-package h01;
+package h01.template;
 
 /**
  * An interface for an offender robot.

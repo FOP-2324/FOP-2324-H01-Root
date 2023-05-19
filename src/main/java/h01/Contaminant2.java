@@ -3,30 +3,41 @@ package h01;
 import fopbot.Direction;
 import fopbot.Robot;
 import fopbot.RobotFamily;
+import h01.template.Contaminant;
+import h01.template.TickBased;
+import h01.template.Utils;
 
-public class Contaminant2 extends Robot implements Contaminant {
+/**
+ * A {@link Contaminant}-{@link Robot} that moves in a predefined way and contaminates the floor.
+ */
+public class Contaminant2 extends Robot implements Contaminant, TickBased {
 
-    private final int updateDelay = 3;
-    private int lastUpdate = 0;
-
+    /**
+     * Creates a new {@link Contaminant2}.
+     *
+     * @param x             the initial x coordinate of the robot
+     * @param y             the initial y coordinate of the robot
+     * @param direction     the initial direction of the robot
+     * @param numberOfCoins the initial number of coins of the robot
+     */
     public Contaminant2(final int x, final int y, final Direction direction, final int numberOfCoins) {
         super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_ORANGE);
     }
 
     @Override
+    public int getUpdateDelay() {
+        return 5;
+    }
+
+    @Override
     public void doMove() {
+        // <solution H2.2>
         if (getNumberOfCoins() == 0) {
             turnOff();
             return;
         }
         if (isTurnedOff()) {
             return;
-        }
-        if (this.lastUpdate < this.updateDelay) {
-            this.lastUpdate++;
-            return;
-        } else {
-            this.lastUpdate = 0;
         }
         // lay 2 coins
         if (!isOnACoin() || Utils.getCoinAmount(getX(), getY()) < 2) {
@@ -38,7 +49,10 @@ public class Contaminant2 extends Robot implements Contaminant {
             }
         }
         // get valid paths
-        Direction left = null, back = null, right = null, front = null;
+        Direction left = null;
+        Direction back = null;
+        Direction right = null;
+        Direction front = null;
         int validPathsCount = 0;
         for (int i = 0; i < 4; i++) {
             turnLeft();
@@ -61,18 +75,19 @@ public class Contaminant2 extends Robot implements Contaminant {
         }
         // orient on left wall
         Direction direction = null;
-        if(left!=null){
+        if (left != null) {
             direction = left;
-        } else if(front!=null){
+        } else if (front != null) {
             direction = front;
-        } else if(right!=null){
+        } else if (right != null) {
             direction = right;
-        } else if(back!=null){
+        } else if (back != null) {
             direction = back;
         }
         while (getDirection() != direction) {
             turnLeft();
         }
         move();
+        // </solution>
     }
 }

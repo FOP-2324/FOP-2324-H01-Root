@@ -1,14 +1,21 @@
-package h01;
+package h01.template;
 
+import fopbot.Direction;
 import fopbot.World;
 
 import java.awt.Point;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
-public class MazeGenerator {
+/**
+ * A {@link MazeGenerator} generates a maze using a maze generation algorithm and ensures that every field is reachable.
+ */
+public final class MazeGenerator {
     private MazeGenerator() {
     }
 
@@ -62,6 +69,34 @@ public class MazeGenerator {
     }
 
     /**
+     * Parses the inputs to a direction.
+     *
+     * @param keysPressed the keys pressed
+     * @return the direction or null if no direction is pressed
+     */
+    public static Direction getDirection(final Set<Integer> keysPressed) {
+        final Map<Direction, List<Integer>> directionKeys = Map.of(
+            Direction.UP, List.of(java.awt.event.KeyEvent.VK_UP, java.awt.event.KeyEvent.VK_W),
+            Direction.LEFT, List.of(java.awt.event.KeyEvent.VK_LEFT, java.awt.event.KeyEvent.VK_A),
+            Direction.DOWN, List.of(java.awt.event.KeyEvent.VK_DOWN, java.awt.event.KeyEvent.VK_S),
+            Direction.RIGHT, List.of(java.awt.event.KeyEvent.VK_RIGHT, java.awt.event.KeyEvent.VK_D)
+        );
+        final Set<Direction> pressedDirections = new HashSet<>();
+        for (final Direction direction : directionKeys.keySet()) {
+            for (final Integer key : directionKeys.get(direction)) {
+                if (keysPressed.contains(key)) {
+                    pressedDirections.add(direction);
+                }
+            }
+        }
+        if (pressedDirections.size() == 1) {
+            return pressedDirections.iterator().next();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Returns a list of neighboring cells for the given cell.
      *
      * @param p The cell coordinates
@@ -75,7 +110,7 @@ public class MazeGenerator {
         // Iterate through all four directions (right, down, left, up)
         for (int i = 0; i < 4; i++) {
             // Check if the neighboring cell is within the maze grid
-            if (Utils.isValidCoordinate(p.x + dx, p.y + dy)) {
+            if (isValidCoordinate(p.x + dx, p.y + dy)) {
                 neighbours.add(new Point(p.x + dx, p.y + dy));
             }
 
@@ -86,5 +121,16 @@ public class MazeGenerator {
         }
 
         return neighbours;
+    }
+
+    /**
+     * Returns {@code true} if the given coordinate is a valid coordinate in the current world.
+     *
+     * @param x the x coordinate to check
+     * @param y the y coordinate to check
+     * @return {@code true} if the given coordinate is a valid coordinate in the current world
+     */
+    public static boolean isValidCoordinate(final int x, final int y) {
+        return x >= 0 && x < World.getWidth() && y >= 0 && y < World.getHeight();
     }
 }

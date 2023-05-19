@@ -1,9 +1,9 @@
-package h01;
+package h01.template;
 
 /**
  * An interface for a cleaner robot.
  */
-public interface Cleaner {
+public interface Cleaner extends TickBased {
     /**
      * Handles the input from the graphical user interface.
      *
