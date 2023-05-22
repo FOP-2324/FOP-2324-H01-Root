@@ -1,10 +1,11 @@
 package h01.template;
 
+import fopbot.Direction;
 import fopbot.World;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,6 +25,34 @@ public class GameInputHandler {
      * If {@code true} the robot should pick a coin from the current field.
      */
     private final AtomicBoolean shouldPickCoins = new AtomicBoolean(false);
+
+    /**
+     * Parses the inputs to a direction.
+     *
+     * @param keysPressed the keys pressed
+     * @return the direction or null if no direction is pressed
+     */
+    public static Direction getDirectionFromKeysPressed(final Set<Integer> keysPressed) {
+        final Map<Direction, List<Integer>> directionKeys = Map.of(
+            Direction.UP, List.of(KeyEvent.VK_UP, KeyEvent.VK_W),
+            Direction.LEFT, List.of(KeyEvent.VK_LEFT, KeyEvent.VK_A),
+            Direction.DOWN, List.of(KeyEvent.VK_DOWN, KeyEvent.VK_S),
+            Direction.RIGHT, List.of(KeyEvent.VK_RIGHT, KeyEvent.VK_D)
+        );
+        final Set<Direction> pressedDirections = new HashSet<>();
+        for (final Direction direction : directionKeys.keySet()) {
+            for (final Integer key : directionKeys.get(direction)) {
+                if (keysPressed.contains(key)) {
+                    pressedDirections.add(direction);
+                }
+            }
+        }
+        if (pressedDirections.size() == 1) {
+            return pressedDirections.iterator().next();
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Installs the {@link GameInputHandler} to the {@link World}.
@@ -52,7 +81,7 @@ public class GameInputHandler {
      */
     protected void updateKeysPressed() {
         this.direction.set(
-            Optional.ofNullable(MazeGenerator.getDirectionFromKeysPressed(World.getGlobalWorld().getInputHandler().getKeysPressed()))
+            Optional.ofNullable(getDirectionFromKeysPressed(World.getGlobalWorld().getInputHandler().getKeysPressed()))
                 .map(Enum::ordinal)
                 .orElse(-1)
         );

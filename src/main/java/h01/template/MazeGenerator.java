@@ -68,41 +68,13 @@ public final class MazeGenerator {
                     for (final var wall : wallBlock.getWalls()) {
                         switch (wall) {
                             case UP -> World.placeHorizontalWall(x, y);
-                            //case DOWN -> World.placeHorizontalWall(x, y - 1);
-                            //case LEFT -> World.placeVerticalWall(x - 1, y);
+                            //case DOWN -> World.placeHorizontalWall(x, y - 1); // Not needed, will lead to an exception
+                            //case LEFT -> World.placeVerticalWall(x - 1, y); // Not needed, will lead to an exception
                             case RIGHT -> World.placeVerticalWall(x, y);
                         }
                     }
                 }
             }
-        }
-    }
-
-    /**
-     * Parses the inputs to a direction.
-     *
-     * @param keysPressed the keys pressed
-     * @return the direction or null if no direction is pressed
-     */
-    public static Direction getDirectionFromKeysPressed(final Set<Integer> keysPressed) {
-        final Map<Direction, List<Integer>> directionKeys = Map.of(
-            Direction.UP, List.of(java.awt.event.KeyEvent.VK_UP, java.awt.event.KeyEvent.VK_W),
-            Direction.LEFT, List.of(java.awt.event.KeyEvent.VK_LEFT, java.awt.event.KeyEvent.VK_A),
-            Direction.DOWN, List.of(java.awt.event.KeyEvent.VK_DOWN, java.awt.event.KeyEvent.VK_S),
-            Direction.RIGHT, List.of(java.awt.event.KeyEvent.VK_RIGHT, java.awt.event.KeyEvent.VK_D)
-        );
-        final Set<Direction> pressedDirections = new HashSet<>();
-        for (final Direction direction : directionKeys.keySet()) {
-            for (final Integer key : directionKeys.get(direction)) {
-                if (keysPressed.contains(key)) {
-                    pressedDirections.add(direction);
-                }
-            }
-        }
-        if (pressedDirections.size() == 1) {
-            return pressedDirections.iterator().next();
-        } else {
-            return null;
         }
     }
 
