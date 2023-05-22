@@ -21,7 +21,7 @@ public final class Utils {
     /**
      * The random number generator used by this exercise.
      */
-    public static Random rnd = new Random(3);
+    public static Random rnd = new Random();
 
     /**
      * Gets a random integer between min and max (both inclusive).
