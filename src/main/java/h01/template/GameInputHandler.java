@@ -52,7 +52,7 @@ public class GameInputHandler {
      */
     protected void updateKeysPressed() {
         this.direction.set(
-            Optional.ofNullable(MazeGenerator.getDirection(World.getGlobalWorld().getInputHandler().getKeysPressed()))
+            Optional.ofNullable(MazeGenerator.getDirectionFromKeysPressed(World.getGlobalWorld().getInputHandler().getKeysPressed()))
                 .map(Enum::ordinal)
                 .orElse(-1)
         );

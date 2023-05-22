@@ -4,13 +4,7 @@ import fopbot.Direction;
 import fopbot.World;
 
 import java.awt.Point;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A {@link MazeGenerator} generates a maze using a maze generation algorithm and ensures that every field is reachable.
@@ -24,6 +18,14 @@ public final class MazeGenerator {
      * Walls are placed using World.placeHorizontalWall and World.placeVerticalWall.
      */
     public static void generateMaze() {
+        // Create a 2D array to keep track of the walls
+        final WallBlock[][] walls = new WallBlock[World.getWidth()][World.getHeight()];
+        for (var x = 0; x < World.getWidth(); x++) {
+            for (var y = 0; y < World.getHeight(); y++) {
+                walls[x][y] = new WallBlock(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+            }
+        }
+
         // Create a 2D array to keep track of visited fields
         final var visited = new boolean[World.getWidth()][World.getHeight()];
 
@@ -42,28 +44,36 @@ public final class MazeGenerator {
                 .stream()
                 .filter(p -> !visited[p.x][p.y])
                 .toList();
-
             if (!neighbours.isEmpty()) {
                 // Choose a random neighboring cell
-                final var next = neighbours.get(new Random().nextInt(neighbours.size()));
+                final var next = neighbours.get(Utils.rnd.nextInt(neighbours.size()));
                 visited[next.x][next.y] = true;
 
-                // Place walls inside the maze grid
-                if (next.x == current.x) {
-                    // If the next cell is in the same column, place a vertical wall
-                    // The wall should be placed one cell below the current cell to prevent blocking the path
-                    World.placeVerticalWall(current.x, Math.min(current.y, next.y) + 1);
-                } else {
-                    // If the next cell is in the same row, place a horizontal wall
-                    // The wall should be placed one cell to the right of the current cell to prevent blocking the path
-                    World.placeHorizontalWall(Math.min(current.x, next.x) + 1, current.y);
-                }
+                walls[current.x][current.y].removeWall(Utils.getRelativeDirection(current, next));
+                walls[next.x][next.y].removeWall(Utils.getRelativeDirection(next, current));
 
                 stack.push(next);
                 current = next;
             } else {
                 // Backtrack to the previous cell
                 current = stack.pop();
+            }
+        }
+
+        // Place the walls
+        for (var x = 0; x < World.getWidth(); x++) {
+            for (var y = 0; y < World.getHeight(); y++) {
+                final var wallBlock = walls[x][y];
+                if (wallBlock != null) {
+                    for (final var wall : wallBlock.getWalls()) {
+                        switch (wall) {
+                            case UP -> World.placeHorizontalWall(x, y);
+                            //case DOWN -> World.placeHorizontalWall(x, y - 1);
+                            //case LEFT -> World.placeVerticalWall(x - 1, y);
+                            case RIGHT -> World.placeVerticalWall(x, y);
+                        }
+                    }
+                }
             }
         }
     }
@@ -74,7 +84,7 @@ public final class MazeGenerator {
      * @param keysPressed the keys pressed
      * @return the direction or null if no direction is pressed
      */
-    public static Direction getDirection(final Set<Integer> keysPressed) {
+    public static Direction getDirectionFromKeysPressed(final Set<Integer> keysPressed) {
         final Map<Direction, List<Integer>> directionKeys = Map.of(
             Direction.UP, List.of(java.awt.event.KeyEvent.VK_UP, java.awt.event.KeyEvent.VK_W),
             Direction.LEFT, List.of(java.awt.event.KeyEvent.VK_LEFT, java.awt.event.KeyEvent.VK_A),
@@ -110,7 +120,7 @@ public final class MazeGenerator {
         // Iterate through all four directions (right, down, left, up)
         for (int i = 0; i < 4; i++) {
             // Check if the neighboring cell is within the maze grid
-            if (isValidCoordinate(p.x + dx, p.y + dy)) {
+            if (Utils.isValidCoordinate(p.x + dx, p.y + dy)) {
                 neighbours.add(new Point(p.x + dx, p.y + dy));
             }
 
@@ -121,16 +131,5 @@ public final class MazeGenerator {
         }
 
         return neighbours;
-    }
-
-    /**
-     * Returns {@code true} if the given coordinate is a valid coordinate in the current world.
-     *
-     * @param x the x coordinate to check
-     * @param y the y coordinate to check
-     * @return {@code true} if the given coordinate is a valid coordinate in the current world
-     */
-    public static boolean isValidCoordinate(final int x, final int y) {
-        return x >= 0 && x < World.getWidth() && y >= 0 && y < World.getHeight();
     }
 }

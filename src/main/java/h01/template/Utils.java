@@ -1,8 +1,10 @@
 package h01.template;
 
 import fopbot.Coin;
+import fopbot.Direction;
 import fopbot.World;
 
+import java.awt.*;
 import java.util.Random;
 
 /**
@@ -19,7 +21,7 @@ public final class Utils {
     /**
      * The random number generator used by this exercise.
      */
-    public static Random rnd = new Random();
+    public static Random rnd = new Random(3);
 
     /**
      * Gets a random integer between min and max (both inclusive).
@@ -46,5 +48,39 @@ public final class Utils {
             .map(e -> (Coin) e)
             .mapToInt(Coin::getCount)
             .sum();
+    }
+
+    /**
+     * Returns the direction from p1 to p2.
+     *
+     * @param p1 The first point
+     * @param p2 The second point
+     * @return The direction from p1 to p2
+     */
+    public static Direction getRelativeDirection(final Point p1, final Point p2) {
+        if (p1.x == p2.x) {
+            if (p1.y < p2.y) {
+                return Direction.UP;
+            } else {
+                return Direction.DOWN;
+            }
+        } else {
+            if (p1.x < p2.x) {
+                return Direction.RIGHT;
+            } else {
+                return Direction.LEFT;
+            }
+        }
+    }
+
+    /**
+     * Returns {@code true} if the given coordinate is a valid coordinate in the current world.
+     *
+     * @param x the x coordinate to check
+     * @param y the y coordinate to check
+     * @return {@code true} if the given coordinate is a valid coordinate in the current world
+     */
+    public static boolean isValidCoordinate(final int x, final int y) {
+        return x >= 0 && x < World.getWidth() && y >= 0 && y < World.getHeight();
     }
 }
