@@ -21,7 +21,7 @@ public class Contaminant2 extends Robot implements Contaminant, TickBased {
      * @param numberOfCoins the initial number of coins of the robot
      */
     public Contaminant2(final int x, final int y, final Direction direction, final int numberOfCoins) {
-        super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_ORANGE);
+        super(x, y, direction, numberOfCoins, RobotFamily.SQUARE_AQUA);
     }
 
     @Override
