@@ -23,6 +23,8 @@ public class GameController extends GameControllerBase {
         // <solution H3>
         // If all Offenders are turned off, the game is won
         if (this.robots.stream().filter(r -> r instanceof Contaminant).allMatch(Robot::isTurnedOff)) {
+            getContaminant1().turnOff();
+            getContaminant2().turnOff();
             System.out.println("Cleaning robot won!");
             stopGame();
         }
@@ -36,7 +38,8 @@ public class GameController extends GameControllerBase {
             }
         }
         if (dirtyFields > World.getWidth() * World.getHeight() / 2) {
-            System.out.println("Offenders won!");
+            getCleaner().turnOff();
+            System.out.println("Contaminants won!");
             stopGame();
         }
         // </solution H3>

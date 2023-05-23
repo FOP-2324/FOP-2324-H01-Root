@@ -4,7 +4,7 @@ import fopbot.Coin;
 import fopbot.Direction;
 import fopbot.World;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Random;
 
 /**

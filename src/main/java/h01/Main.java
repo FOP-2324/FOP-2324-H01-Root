@@ -10,6 +10,6 @@ public class Main {
      * @param args program arguments, currently ignored
      */
     public static void main(final String[] args) {
-        new GameController().startGame();
+        new GameController().startGame(100);
     }
 }

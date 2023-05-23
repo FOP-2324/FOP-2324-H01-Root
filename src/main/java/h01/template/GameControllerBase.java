@@ -23,18 +23,37 @@ public abstract class GameControllerBase {
      * The {@link Timer} that controls the game loop.
      */
     private final Timer gameLoopTimer = new Timer();
+
     /**
      * The {@link GameInputHandler} that handles the input of the user.
      */
     private final GameInputHandler inputHandler = new GameInputHandler();
+
     /**
      * The {@link Robot}s that are controlled by the {@link GameControllerBase}.
      */
     protected final Set<Robot> robots = new HashSet<>();
+
+    /**
+     * The {@link Cleaner} {@link Robot}.
+     */
+    protected Robot cleaner;
+
+    /**
+     * The {@link Contaminant1} {@link Robot}.
+     */
+    protected Robot contaminant1;
+
+    /**
+     * The {@link Contaminant2} {@link Robot}.
+     */
+    protected Robot contaminant2;
+
     /**
      * A {@link Map} that maps a {@link Robot} to the amount of ticks that have passed since the last tick action.
      */
     private final Map<Robot, Integer> robotTicks = new HashMap<>();
+
     /**
      * The {@link TimerTask} that is executed every tick.
      */
@@ -70,10 +89,37 @@ public abstract class GameControllerBase {
     };
 
     /**
+     * Gets the {@link Cleaner} {@link Robot}.
+     *
+     * @return the {@link Cleaner} {@link Robot}
+     */
+    public Robot getCleaner() {
+        return cleaner;
+    }
+
+    /**
+     * Gets the {@link Contaminant1} {@link Robot}.
+     *
+     * @return the {@link Contaminant1} {@link Robot}
+     */
+    public Robot getContaminant1() {
+        return contaminant1;
+    }
+
+    /**
+     * Gets the {@link Contaminant2} {@link Robot}.
+     *
+     * @return the {@link Contaminant2} {@link Robot}
+     */
+    public Robot getContaminant2() {
+        return contaminant2;
+    }
+
+    /**
      * Starts the game loop.
      */
-    public void startGame() {
-        this.gameLoopTimer.scheduleAtFixedRate(this.gameLoopTask, 0, 100);
+    public void startGame(int tickDelay) {
+        this.gameLoopTimer.scheduleAtFixedRate(this.gameLoopTask, 0, tickDelay);
     }
 
     /**
@@ -107,19 +153,19 @@ public abstract class GameControllerBase {
      * Adds the {@link Robot}s to the {@link World}.
      */
     public void setupRobots() {
-        this.robots.add(new CleaningRobot(
+        this.robots.add(cleaner = new CleaningRobot(
             0,
             0,
             Direction.UP,
             0)
         );
-        this.robots.add(new Contaminant1(
+        this.robots.add(contaminant1 = new Contaminant1(
             World.getWidth() - 1,
             0,
             Direction.UP,
             5 * World.getWidth() * World.getHeight())
         );
-        this.robots.add(new Contaminant2(
+        this.robots.add(contaminant2 = new Contaminant2(
             World.getWidth() - 1,
             World.getHeight() - 1,
             Direction.UP,

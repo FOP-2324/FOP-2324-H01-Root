@@ -5,7 +5,11 @@ import fopbot.World;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
