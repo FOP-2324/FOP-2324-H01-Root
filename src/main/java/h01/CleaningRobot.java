@@ -31,7 +31,7 @@ public class CleaningRobot extends Robot implements Cleaner, TickBased {
         if (shouldPickCoins && isOnACoin() && getNumberOfCoins() < 25) {
             pickCoin();
         }
-        if (direction >= 0) {
+        if (direction >= 0 && direction < Direction.values().length) {
             while (getDirection() != Direction.values()[direction]) {
                 turnLeft();
             }

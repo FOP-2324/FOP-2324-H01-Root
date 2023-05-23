@@ -1,0 +1,94 @@
+[
+  {
+    "worldWidth": 10,
+    "worldHeight": 10,
+    "cleaningRobot": {
+      "x": 5,
+      "y": 5,
+      "direction": "UP",
+      "numberOfCoins": 10
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "direction": -1,
+    "shouldPutCoins": false,
+    "shouldPickCoins": false,
+    "shouldMove": false,
+    "canMove": true,
+    "expectedEndPosition": {
+      "x": 5,
+      "y": 5
+    },
+    "expectedEndDirection": "UP",
+    "expectedRobotCoinDelta": 0
+  },
+  {
+    "worldWidth": 10,
+    "worldHeight": 10,
+    "cleaningRobot": {
+      "x": 5,
+      "y": 5,
+      "direction": "RIGHT",
+      "numberOfCoins": 10
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "direction": -1337,
+    "shouldPutCoins": false,
+    "shouldPickCoins": false,
+    "shouldMove": false,
+    "canMove": true,
+    "expectedEndPosition": {
+      "x": 5,
+      "y": 5
+    },
+    "expectedEndDirection": "RIGHT",
+    "expectedRobotCoinDelta": 0
+  },
+  {
+    "worldWidth": 10,
+    "worldHeight": 10,
+    "cleaningRobot": {
+      "x": 5,
+      "y": 5,
+      "direction": "DOWN",
+      "numberOfCoins": 10
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "direction": 4,
+    "shouldPutCoins": false,
+    "shouldPickCoins": false,
+    "shouldMove": false,
+    "canMove": true,
+    "expectedEndPosition": {
+      "x": 5,
+      "y": 5
+    },
+    "expectedEndDirection": "DOWN",
+    "expectedRobotCoinDelta": 0
+  },
+  {
+    "worldWidth": 10,
+    "worldHeight": 10,
+    "cleaningRobot": {
+      "x": 5,
+      "y": 5,
+      "direction": "LEFT",
+      "numberOfCoins": 10
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "direction": 42069,
+    "shouldPutCoins": false,
+    "shouldPickCoins": false,
+    "shouldMove": false,
+    "canMove": true,
+    "expectedEndPosition": {
+      "x": 5,
+      "y": 5
+    },
+    "expectedEndDirection": "LEFT",
+    "expectedRobotCoinDelta": 0
+  }
+]

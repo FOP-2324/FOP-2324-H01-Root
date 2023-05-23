@@ -38,7 +38,7 @@ public class GameController extends GameControllerBase {
             }
         }
         if (dirtyFields > World.getWidth() * World.getHeight() / 2) {
-            getCleaner().turnOff();
+            getCleaningRobot().turnOff();
             System.out.println("Contaminants won!");
             stopGame();
         }

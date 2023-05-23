@@ -35,9 +35,9 @@ public abstract class GameControllerBase {
     protected final Set<Robot> robots = new HashSet<>();
 
     /**
-     * The {@link Cleaner} {@link Robot}.
+     * The {@link CleaningRobot} {@link Robot}.
      */
-    protected Robot cleaner;
+    protected Robot cleaningRobot;
 
     /**
      * The {@link Contaminant1} {@link Robot}.
@@ -89,12 +89,12 @@ public abstract class GameControllerBase {
     };
 
     /**
-     * Gets the {@link Cleaner} {@link Robot}.
+     * Gets the {@link CleaningRobot} {@link Robot}.
      *
-     * @return the {@link Cleaner} {@link Robot}
+     * @return the {@link CleaningRobot} {@link Robot}
      */
-    public Robot getCleaner() {
-        return cleaner;
+    public Robot getCleaningRobot() {
+        return cleaningRobot;
     }
 
     /**
@@ -153,7 +153,7 @@ public abstract class GameControllerBase {
      * Adds the {@link Robot}s to the {@link World}.
      */
     public void setupRobots() {
-        this.robots.add(cleaner = new CleaningRobot(
+        this.robots.add(cleaningRobot = new CleaningRobot(
             0,
             0,
             Direction.UP,
