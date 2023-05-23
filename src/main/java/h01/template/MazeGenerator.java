@@ -4,7 +4,9 @@ import fopbot.Direction;
 import fopbot.World;
 
 import java.awt.Point;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * A {@link MazeGenerator} generates a maze using a maze generation algorithm and ensures that every field is reachable.
@@ -68,9 +70,9 @@ public final class MazeGenerator {
                     for (final var wall : wallBlock.getWalls()) {
                         switch (wall) {
                             case UP -> World.placeHorizontalWall(x, y);
-                            //case DOWN -> World.placeHorizontalWall(x, y - 1); // Not needed, will lead to an exception
-                            //case LEFT -> World.placeVerticalWall(x - 1, y); // Not needed, will lead to an exception
+                            case DOWN, LEFT -> { } // Not needed, will lead to an exception
                             case RIGHT -> World.placeVerticalWall(x, y);
+                            default -> throw new IllegalStateException("Unexpected value: " + wall);
                         }
                     }
                 }
@@ -85,23 +87,10 @@ public final class MazeGenerator {
      * @return List of neighboring cells
      */
     private static List<Point> getNeighbours(final Point p) {
-        final var neighbours = new ArrayList<Point>();
-        int dx = 1;
-        int dy = 0;
-
-        // Iterate through all four directions (right, down, left, up)
-        for (int i = 0; i < 4; i++) {
-            // Check if the neighboring cell is within the maze grid
-            if (Utils.isValidCoordinate(p.x + dx, p.y + dy)) {
-                neighbours.add(new Point(p.x + dx, p.y + dy));
-            }
-
-            // Rotate 90 degrees clockwise for the next direction
-            final int tmp = dx;
-            dx = -dy;
-            dy = tmp;
-        }
-
-        return neighbours;
+        return Stream.iterate(new Point(1, 0), p2 -> new Point(-p2.y, p2.x))
+            .limit(4)
+            .map(p2 -> new Point(p.x + p2.x, p.y + p2.y))
+            .filter(p2 -> Utils.isValidCoordinate(p2.x, p2.y))
+            .toList();
     }
 }
