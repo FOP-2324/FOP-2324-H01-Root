@@ -26,7 +26,7 @@ public class Contaminant2 extends Robot implements Contaminant, TickBased {
 
     @Override
     public int getUpdateDelay() {
-        return 5;
+        return 8;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class CleaningRobot extends Robot implements Cleaner, TickBased {
     }
 
     @Override
-    public void handleInput(final int direction, final boolean shouldPutCoins, final boolean shouldPickCoins) {
+    public void handleKeyInput(final int direction, final boolean shouldPutCoins, final boolean shouldPickCoins) {
         // <solution H1>
         if (shouldPutCoins /*&& !isOnACoin()*/ && hasAnyCoins()) {
             putCoin();

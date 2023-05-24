@@ -74,7 +74,7 @@ public abstract class GameControllerBase {
                 GameControllerBase.this.robotTicks.put(robot, 0);
                 // do tick action
                 if (robot instanceof final Cleaner r) {
-                    r.handleInput(
+                    r.handleKeyInput(
                         GameControllerBase.this.inputHandler.getDirection(),
                         GameControllerBase.this.inputHandler.getShouldPickCoins(),
                         GameControllerBase.this.inputHandler.getShouldPutCoins()

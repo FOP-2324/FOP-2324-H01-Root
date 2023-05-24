@@ -11,5 +11,5 @@ public interface Cleaner extends TickBased {
      * @param shouldPutCoins  if {@code true} the robot should put a coin on the current field.
      * @param shouldPickCoins if {@code true} the robot should pick a coin from the current field.
      */
-    void handleInput(int direction, boolean shouldPutCoins, boolean shouldPickCoins);
+    void handleKeyInput(int direction, boolean shouldPutCoins, boolean shouldPickCoins);
 }
