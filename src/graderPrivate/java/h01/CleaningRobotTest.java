@@ -66,7 +66,7 @@ public class CleaningRobotTest {
         final Direction expectedEndDirection = params.get("expectedEndDirection");
         final int expectedRobotCoinDelta = params.get("expectedRobotCoinDelta");
 
-        List<String> ignoreParams = new ArrayList<>();
+        final List<String> ignoreParams = new ArrayList<>();
         if (!verifyMovement) {
             ignoreParams.add("expectedEndPosition");
         }
@@ -98,7 +98,7 @@ public class CleaningRobotTest {
         }
 
         Assertions2.call(
-            () -> cleaningRobot.handleInput(direction, shouldPutCoins, shouldPickCoins),
+            () -> cleaningRobot.handleKeyInput(direction, shouldPutCoins, shouldPickCoins),
             context,
             r -> "The Method handleInput threw an exception"
         );
