@@ -7,9 +7,6 @@ import h01.template.Contaminant;
 import h01.template.TickBased;
 import h01.template.Utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A {@link Contaminant}-{@link Robot} that moves randomly and contaminates the floor.
  */
@@ -51,6 +48,7 @@ public class Contaminant1 extends Robot implements Contaminant, TickBased {
                 putCoin();
             }
         }
+
         // get valid paths
         Direction path0 = null;
         Direction path1 = null;
@@ -62,7 +60,7 @@ public class Contaminant1 extends Robot implements Contaminant, TickBased {
             turnLeft();
             if (isFrontClear()) {
                 validPathsCount++;
-                if (path0 == null){
+                if (path0 == null) {
                     path0 = getDirection();
                 } else if (path1 == null) {
                     path1 = getDirection();
@@ -78,7 +76,7 @@ public class Contaminant1 extends Robot implements Contaminant, TickBased {
             return;
         }
 
-        final int randomPathIndex = Utils.getRandomInteger(0, validPathsCount-1);
+        final int randomPathIndex = Utils.getRandomInteger(0, validPathsCount - 1);
         Direction path = null;
         if (randomPathIndex == 0) {
             path = path0;
