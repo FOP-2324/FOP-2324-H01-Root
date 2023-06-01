@@ -19,9 +19,15 @@ import java.util.function.Function;
 import static h01.TestConstants.SHOW_WORLD;
 import static h01.TestConstants.WORLD_DELAY;
 
+/**
+ * Tests for the {@link CleaningRobot} class.
+ */
 @TestForSubmission
 public class CleaningRobotTest {
 
+    /**
+     * The custom converters for this test class.
+     */
     @SuppressWarnings("unused")
     public static final Map<String, Function<JsonNode, ?>> customConverters = Map.ofEntries(
         Map.entry("worldWidth", JsonNode::asInt),
@@ -41,6 +47,14 @@ public class CleaningRobotTest {
         Map.entry("expectedRobotCoinDelta", JsonNode::asInt)
     );
 
+    /**
+     * Tests the {@link CleaningRobot#handleKeyInput(int, boolean, boolean)} method.
+     *
+     * @param params           The {@link JsonParameterSet} to use for the test.
+     * @param verifyMovement   Whether to verify the movement.
+     * @param verifyRotation   Whether to verify the rotation.
+     * @param verifyCoinAmount Whether to verify the coin amount.
+     */
     public void testMovement(
         final JsonParameterSet params,
         final boolean verifyMovement,

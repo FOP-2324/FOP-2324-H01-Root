@@ -19,15 +19,24 @@ public class H01_RubricProvider implements RubricProvider {
                 .addChildCriteria(
                     criterion(
                         "Wenn die übergebene Direction < 0 oder > 3 ist, so bleibt der Roboter stehen.",
-                        JUnitTestRef.ofMethod(() -> CleaningRobotTest.class.getDeclaredMethod("testMovementInvalidDirection", JsonParameterSet.class))
+                        JUnitTestRef.ofMethod(() -> CleaningRobotTest.class.getDeclaredMethod(
+                            "testMovementInvalidDirection",
+                            JsonParameterSet.class
+                        ))
                     ),
                     criterion(
                         "Wenn die übergebene Direction >= 0 und < 4 ist, dann schaut der Roboter in die entsprechende Richtung.",
-                        JUnitTestRef.ofMethod(() -> CleaningRobotTest.class.getDeclaredMethod("testMovementValidDirectionRotation", JsonParameterSet.class))
+                        JUnitTestRef.ofMethod(() -> CleaningRobotTest.class.getDeclaredMethod(
+                            "testMovementValidDirectionRotation",
+                            JsonParameterSet.class
+                        ))
                     ),
                     criterion(
                         "Wenn die übergebene Direction >= 0 und < 4 ist, so bewegt sich der Roboter in die entsprechende Richtung, falls der Weg frei ist.",
-                        JUnitTestRef.ofMethod(() -> CleaningRobotTest.class.getDeclaredMethod("testMovementValidDirectionHasMoved", JsonParameterSet.class))
+                        JUnitTestRef.ofMethod(() -> CleaningRobotTest.class.getDeclaredMethod(
+                            "testMovementValidDirectionHasMoved",
+                            JsonParameterSet.class
+                        ))
                     )
                 )
                 .build()
@@ -77,7 +86,7 @@ public class H01_RubricProvider implements RubricProvider {
                 .addChildCriteria(
                     criterion(
                         "Der cleaner gewinnt, wenn alle Contaminants ausgeschaltet sind."
-                    ),criterion(
+                    ), criterion(
                         "Der cleaner gewinnt, wenn sich in der Abladezone mindestens 200 Münzen befinden."
                     ),
                     criterion(
