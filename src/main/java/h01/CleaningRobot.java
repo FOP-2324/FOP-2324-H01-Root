@@ -3,6 +3,7 @@ package h01;
 import fopbot.Direction;
 import fopbot.Robot;
 import h01.template.Cleaner;
+import h01.template.GameConstants;
 import h01.template.TickBased;
 
 /**
@@ -28,7 +29,7 @@ public class CleaningRobot extends Robot implements Cleaner, TickBased {
         if (shouldPutCoins /*&& !isOnACoin()*/ && hasAnyCoins()) {
             putCoin();
         }
-        if (shouldPickCoins && isOnACoin() && getNumberOfCoins() < 25) {
+        if (shouldPickCoins && isOnACoin() && getNumberOfCoins() < GameConstants.CLEANER_CAPACITY) {
             pickCoin();
         }
         if (direction >= 0 && direction < Direction.values().length) {

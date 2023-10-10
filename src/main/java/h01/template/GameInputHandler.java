@@ -62,7 +62,7 @@ public class GameInputHandler {
      * Installs the {@link GameInputHandler} to the {@link World}.
      */
     public void install() {
-        World.getGlobalWorld().getInputHandler().addListener(new KeyAdapter() {
+        World.getGlobalWorld().getInputHandler().addKeyListener(new KeyAdapter() {
             @Override
             public void keyTyped(final KeyEvent e) {
                 updateKeysPressed();

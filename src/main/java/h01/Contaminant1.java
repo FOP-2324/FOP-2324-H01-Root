@@ -4,6 +4,7 @@ import fopbot.Direction;
 import fopbot.Robot;
 import fopbot.RobotFamily;
 import h01.template.Contaminant;
+import h01.template.GameConstants;
 import h01.template.TickBased;
 import h01.template.Utils;
 
@@ -41,7 +42,11 @@ public class Contaminant1 extends Robot implements Contaminant, TickBased {
         }
         // lay random amount of coins between 1 and 5
         if (!isOnACoin() || Utils.getCoinAmount(getX(), getY()) < 10) {
-            for (int i = 0; i < Utils.getRandomInteger(1, 5); i++) {
+            final int amount = Utils.getRandomInteger(
+                GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS,
+                GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS
+            );
+            for (int i = 0; i < amount; i++) {
                 if (!hasAnyCoins() || Utils.getCoinAmount(getX(), getY()) >= 10) {
                     break;
                 }

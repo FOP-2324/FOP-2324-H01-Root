@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static h01.template.GameConstants.*;
+
 /**
  * A {@link GameControllerBase} controls the game loop and the {@link Robot}s and checks the win condition.
  */
@@ -118,8 +120,10 @@ public abstract class GameControllerBase {
     /**
      * Starts the game loop.
      */
-    public void startGame(int tickDelay) {
-        this.gameLoopTimer.scheduleAtFixedRate(this.gameLoopTask, 0, tickDelay);
+    public void startGame() {
+        System.out.println("Starting game...");
+        System.out.println(GameConstants.getGameConstantsString());
+        this.gameLoopTimer.scheduleAtFixedRate(this.gameLoopTask, 0, TICK_DELAY);
     }
 
     /**
@@ -154,22 +158,25 @@ public abstract class GameControllerBase {
      */
     public void setupRobots() {
         this.robots.add(cleaningRobot = new CleaningRobot(
-            0,
-            0,
-            Direction.UP,
-            0)
+                0,
+                0,
+                Direction.UP,
+                0
+            )
         );
         this.robots.add(contaminant1 = new Contaminant1(
-            World.getWidth() - 1,
-            0,
-            Direction.UP,
-            5 * World.getWidth() * World.getHeight())
+                World.getWidth() - 1,
+                0,
+                Direction.UP,
+                5 * World.getWidth() * World.getHeight()
+            )
         );
         this.robots.add(contaminant2 = new Contaminant2(
-            World.getWidth() - 1,
-            World.getHeight() - 1,
-            Direction.UP,
-            2 * World.getWidth() * World.getHeight())
+                World.getWidth() - 1,
+                World.getHeight() - 1,
+                Direction.UP,
+                2 * World.getWidth() * World.getHeight()
+            )
         );
     }
 

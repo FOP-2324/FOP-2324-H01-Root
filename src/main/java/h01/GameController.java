@@ -40,6 +40,14 @@ public class GameController extends GameControllerBase {
             System.out.println("Contaminants won!");
             stopGame();
         }
+
+        // If the dumping area contains at least 200 coins, the game is won
+        if (Utils.getCoinAmount(0, World.getHeight() - 1) >= 200) {
+            getContaminant1().turnOff();
+            getContaminant2().turnOff();
+            System.out.println("Cleaning robot won!");
+            stopGame();
+        }
         // </solution H3>
     }
 }
