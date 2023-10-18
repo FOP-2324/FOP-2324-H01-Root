@@ -41,13 +41,13 @@ public class Contaminant1 extends Robot implements Contaminant, TickBased {
             return;
         }
         // lay random amount of coins between 1 and 5
-        if (!isOnACoin() || Utils.getCoinAmount(getX(), getY()) < 10) {
+        if (!isOnACoin() || Utils.getCoinAmount(getX(), getY()) < 20) {
             final int amount = Utils.getRandomInteger(
                 GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS,
                 GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS
             );
             for (int i = 0; i < amount; i++) {
-                if (!hasAnyCoins() || Utils.getCoinAmount(getX(), getY()) >= 10) {
+                if (!hasAnyCoins() || Utils.getCoinAmount(getX(), getY()) >= 20) {
                     break;
                 }
                 putCoin();
