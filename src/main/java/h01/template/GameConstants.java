@@ -7,15 +7,32 @@ import static org.tudalgo.algoutils.student.io.PropertyUtils.getIntProperty;
 public final class GameConstants {
     public static final int WORLD_WIDTH = getIntProperty("h01.properties", "WORLD_WIDTH");
     public static final int WORLD_HEIGHT = getIntProperty("h01.properties", "WORLD_HEIGHT");
-    public static final int CONTAMINANT_ONE_START_COINS_MULTIPLIER = getIntProperty("h01.properties", "CONTAMINANT_ONE_START_COINS_MULTIPLIER");
-    public static final int CONTAMINANT_TWO_START_COINS_MULTIPLIER = getIntProperty("h01.properties", "CONTAMINANT_TWO_START_COINS_MULTIPLIER");
-    public static final int CONTAMINANT_ONE_MIN_PUT_COINS = getIntProperty("h01.properties", "CONTAMINANT_ONE_MIN_PUT_COINS");
-    public static final int CONTAMINANT_ONE_MAX_PUT_COINS = getIntProperty("h01.properties", "CONTAMINANT_ONE_MAX_PUT_COINS");
+    public static final int CONTAMINANT_ONE_START_COINS_MULTIPLIER = getIntProperty(
+        "h01.properties",
+        "CONTAMINANT_ONE_START_COINS_MULTIPLIER"
+    );
+    public static final int CONTAMINANT_TWO_START_COINS_MULTIPLIER = getIntProperty(
+        "h01.properties",
+        "CONTAMINANT_TWO_START_COINS_MULTIPLIER"
+    );
+    public static final int CONTAMINANT_ONE_MIN_PUT_COINS = getIntProperty(
+        "h01.properties",
+        "CONTAMINANT_ONE_MIN_PUT_COINS"
+    );
+    public static final int CONTAMINANT_ONE_MAX_PUT_COINS = getIntProperty(
+        "h01.properties",
+        "CONTAMINANT_ONE_MAX_PUT_COINS"
+    );
     public static final int CLEANER_CAPACITY = getIntProperty("h01.properties", "CLEANER_CAPACITY");
     public static final int TICK_DELAY = getIntProperty("h01.properties", "TICK_DELAY");
     private static final int _RANDOM_SEED = getIntProperty("h01.properties", "RANDOM_SEED");
     public static final long RANDOM_SEED = _RANDOM_SEED == 0 ? ThreadLocalRandom.current().nextLong() : _RANDOM_SEED;
 
+    /**
+     * Gets a string containing all game constants.
+     *
+     * @return a string containing all game constants
+     */
     public static String getGameConstantsString() {
         return String.format(
             """
