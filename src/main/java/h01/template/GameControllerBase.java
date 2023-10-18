@@ -15,7 +15,9 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static h01.template.GameConstants.*;
+import static h01.template.GameConstants.CONTAMINANT_ONE_START_COINS_MULTIPLIER;
+import static h01.template.GameConstants.CONTAMINANT_TWO_START_COINS_MULTIPLIER;
+import static h01.template.GameConstants.TICK_DELAY;
 
 /**
  * A {@link GameControllerBase} controls the game loop and the {@link Robot}s and checks the win condition.
@@ -168,14 +170,14 @@ public abstract class GameControllerBase {
                 World.getWidth() - 1,
                 0,
                 Direction.UP,
-                5 * World.getWidth() * World.getHeight()
+                CONTAMINANT_ONE_START_COINS_MULTIPLIER * World.getWidth() * World.getHeight()
             )
         );
         this.robots.add(contaminant2 = new Contaminant2(
                 World.getWidth() - 1,
                 World.getHeight() - 1,
                 Direction.UP,
-                2 * World.getWidth() * World.getHeight()
+                CONTAMINANT_TWO_START_COINS_MULTIPLIER * World.getWidth() * World.getHeight()
             )
         );
     }
