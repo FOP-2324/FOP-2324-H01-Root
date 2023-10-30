@@ -37,6 +37,9 @@ public class H01_RubricProvider implements RubricProvider {
                             "testMovementValidDirectionHasMoved",
                             JsonParameterSet.class
                         ))
+                    ),
+                    criterion(
+                        "shouldPutCoin und shouldPickCoin werden korrekt verarbeitet."
                     )
                 )
                 .build()
