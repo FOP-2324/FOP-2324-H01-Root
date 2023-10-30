@@ -32,8 +32,17 @@ public class CleaningRobot extends Robot implements Cleaner, TickBased {
         if (shouldPickCoins && isOnACoin() && getNumberOfCoins() < GameConstants.CLEANER_CAPACITY) {
             pickCoin();
         }
-        if (direction >= 0 && direction < Direction.values().length) {
-            while (getDirection() != Direction.values()[direction]) {
+        if (direction >= 0 && direction < 4) {
+            // start with direction 0 (UP)
+            int dx = 0;
+            int dy = 1;
+            // rotate direction times by 90 degrees to the right
+            for (int i = 0; i < direction; i++) {
+                final int tmp = dx;
+                dx = dy;
+                dy = -tmp;
+            }
+            while (getDirection().getDx() != dx || getDirection().getDy() != dy) {
                 turnLeft();
             }
             if (isFrontClear()) {
