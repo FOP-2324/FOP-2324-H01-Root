@@ -176,6 +176,6 @@ public class CleaningRobotTest {
     @ParameterizedTest
     @JsonParameterSetTest(value = "CleaningRobotTestMovementCoins.json", customConverters = "customConverters")
     public void testMovementCoins(final JsonParameterSet params) {
-        testMovement(params, false, true, true);
+        testMovement(params, false, false, true);
     }
 }
