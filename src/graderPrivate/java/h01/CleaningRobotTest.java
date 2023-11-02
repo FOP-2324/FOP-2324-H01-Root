@@ -69,6 +69,7 @@ public class CleaningRobotTest {
             World.setVisible(true);
         }
         final CleaningRobot cleaningRobot = params.get("cleaningRobot");
+        final Point initialRobotPosition = new Point(cleaningRobot.getX(), cleaningRobot.getY());
         final int direction = params.get("direction");
         final List<Direction> walls = params.get("walls");
         final var initialCoinsOnField = params.getInt("initialCoinsOnField");
@@ -94,7 +95,6 @@ public class CleaningRobotTest {
         final var context = params.toContext(ignoreParams.toArray(String[]::new));
 
         final var initialRobotCoinAmount = cleaningRobot.getNumberOfCoins();
-        final var initialFieldCoinAmount = Utils.getCoinAmount(cleaningRobot.getX(), cleaningRobot.getY());
 
         // Set Walls
         for (Direction wall : walls) {
@@ -142,14 +142,14 @@ public class CleaningRobotTest {
             );
             // Check Field Coin Amount
             Assertions2.assertEquals(
-                initialFieldCoinAmount - expectedRobotCoinDelta,
-                Utils.getCoinAmount(cleaningRobot.getX(), cleaningRobot.getY()),
+                initialCoinsOnField - expectedRobotCoinDelta,
+                Utils.getCoinAmount(initialRobotPosition.x, initialRobotPosition.y),
                 context,
                 r -> String.format(
                     "The field at (%d, %d) should have %d coins.",
-                    cleaningRobot.getX(),
-                    cleaningRobot.getY(),
-                    initialFieldCoinAmount - expectedRobotCoinDelta
+                    initialRobotPosition.x,
+                    initialRobotPosition.y,
+                    initialCoinsOnField - expectedRobotCoinDelta
                 )
             );
         }
@@ -171,5 +171,11 @@ public class CleaningRobotTest {
     @JsonParameterSetTest(value = "CleaningRobotTestMovementValidDirection.json", customConverters = "customConverters")
     public void testMovementValidDirectionRotation(final JsonParameterSet params) {
         testMovement(params, false, true, false);
+    }
+
+    @ParameterizedTest
+    @JsonParameterSetTest(value = "CleaningRobotTestMovementCoins.json", customConverters = "customConverters")
+    public void testMovementCoins(final JsonParameterSet params) {
+        testMovement(params, false, true, true);
     }
 }

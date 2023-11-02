@@ -39,7 +39,11 @@ public class H01_RubricProvider implements RubricProvider {
                         ))
                     ),
                     criterion(
-                        "shouldPutCoin und shouldPickCoin werden korrekt verarbeitet."
+                        "shouldPutCoin und shouldPickCoin werden korrekt verarbeitet.",
+                        JUnitTestRef.ofMethod(() -> CleaningRobotTest.class.getDeclaredMethod(
+                            "testMovementCoins",
+                            JsonParameterSet.class
+                        ))
                     )
                 )
                 .build()
