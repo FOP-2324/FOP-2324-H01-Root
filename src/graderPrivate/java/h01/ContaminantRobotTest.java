@@ -8,7 +8,7 @@ import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.List;
 
 /**
@@ -51,13 +51,13 @@ public abstract class ContaminantRobotTest extends RobotTest {
         final Context context,
         final Point initialRobotPosition
     ) {
-        final int maxCoinAmount = 20;
+        final int maxCoinAmount = robot instanceof Contaminant1 ? 20 : 2;
         final int expectedCoinAmount = Math.min(
             Math.min(
                 initialCoinsOnField + initialRobotCoinAmount,
                 initialCoinsOnField + shouldPlaceCoins
             ),
-            maxCoinAmount
+            Math.max(maxCoinAmount, initialCoinsOnField)
         );
         final int expectedPlaceCoinAmount = expectedCoinAmount - initialCoinsOnField;
         // Check Robot Coin Amount
@@ -103,7 +103,7 @@ public abstract class ContaminantRobotTest extends RobotTest {
      * @param contaminant The robot to test.
      * @param context     The context to use for assertions.
      */
-    static void verifyTurnaround(final Contaminant1 contaminant, final Context context) {
+    static void verifyTurnaround(final Robot contaminant, final Context context) {
         final var firstFourMovements = World.getGlobalWorld()
             .getTrace(contaminant)
             .getTransitions()

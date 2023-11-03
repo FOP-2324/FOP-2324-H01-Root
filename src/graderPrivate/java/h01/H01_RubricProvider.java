@@ -81,7 +81,7 @@ public class H01_RubricProvider implements RubricProvider {
                             criterion(
                                 "Der \"Contaminant1\"-Roboter bewegt sich korrekt in eine zufällige Richtung, die frei ist, falls eine solche existiert.",
                                 JUnitTestRef.ofMethod(() -> Contaminant1Test.class.getDeclaredMethod(
-                                    "testMovement",
+                                    "testTheMovement",
                                     JsonParameterSet.class
                                 ))
                             )
@@ -91,16 +91,32 @@ public class H01_RubricProvider implements RubricProvider {
                         .shortDescription("H2.2 | Contaminant2")
                         .addChildCriteria(
                             criterion(
-                                "Der \"Contaminant2\"-Roboter legt stets die korrekte Anzahl an Münzen ab."
+                                "Wenn der \"Contaminant2\"-Roboter keine Münzen mehr hat, wird er ausgeschaltet und die Methode doMove() führt keine weiteren Aktionen aus.",
+                                JUnitTestRef.ofMethod(() -> Contaminant2Test.class.getDeclaredMethod(
+                                    "testTurnOff",
+                                    JsonParameterSet.class
+                                ))
                             ),
                             criterion(
-                                "Der \"Contaminant2\"-Roboter prüft alle vier Richtungen ab und dreht sich wieder in die Ausgangsrichtung."
+                                "Der \"Contaminant2\"-Roboter legt stets die korrekte Anzahl an Münzen ab.",
+                                JUnitTestRef.ofMethod(() -> Contaminant2Test.class.getDeclaredMethod(
+                                    "testCoins",
+                                    JsonParameterSet.class
+                                ))
                             ),
                             criterion(
-                                "Der \"Contaminant2\"-Roboter bewegt sich korrekt nach dem Bewegungsschema."
+                                "Der \"Contaminant2\"-Roboter prüft alle vier Richtungen ab und dreht sich wieder in die Ausgangsrichtung.",
+                                JUnitTestRef.ofMethod(() -> Contaminant2Test.class.getDeclaredMethod(
+                                    "testRotation",
+                                    JsonParameterSet.class
+                                ))
                             ),
                             criterion(
-                                "Die Bewegung des \"Contaminant2\"-Roboters ist vollständig korrekt."
+                                "Der \"Contaminant2\"-Roboter bewegt sich korrekt nach dem Bewegungsschema.",
+                                JUnitTestRef.ofMethod(() -> Contaminant2Test.class.getDeclaredMethod(
+                                    "testTheMovement",
+                                    JsonParameterSet.class
+                                ))
                             )
                         )
                         .build()

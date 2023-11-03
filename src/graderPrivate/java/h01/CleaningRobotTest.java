@@ -78,7 +78,7 @@ public class CleaningRobotTest extends RobotTest {
 
         final var initialRobotCoinAmount = cleaningRobot.getNumberOfCoins();
 
-        placeWalls(walls, cleaningRobot.getX(),cleaningRobot.getY());
+        placeWalls(walls, cleaningRobot.getX(), cleaningRobot.getY());
 
         // Set Coins
         if (initialCoinsOnField > 0) {

@@ -2,7 +2,7 @@
   {
     "worldWidth": 3,
     "worldHeight": 3,
-    "contaminant1": {
+    "contaminant2": {
       "x": 1,
       "y": 1,
       "direction": "UP",
@@ -12,12 +12,17 @@
     "initialCoinsOnField": 10,
     "shouldTurnOff": false,
     "canMove": true,
-    "amountOfCoinsToPlace": 5
+    "expectedEndPosition": {
+      "x": 0,
+      "y": 1
+    },
+    "expectedEndDirection": "LEFT",
+    "amountOfCoinsToPlace": 2
   },
   {
     "worldWidth": 3,
     "worldHeight": 3,
-    "contaminant1": {
+    "contaminant2": {
       "x": 1,
       "y": 1,
       "direction": "UP",
@@ -27,12 +32,17 @@
     "initialCoinsOnField": 10,
     "shouldTurnOff": false,
     "canMove": true,
-    "amountOfCoinsToPlace": 5
+    "expectedEndPosition": {
+      "x": 0,
+      "y": 1
+    },
+    "expectedEndDirection": "LEFT",
+    "amountOfCoinsToPlace": 2
   },
   {
     "worldWidth": 3,
     "worldHeight": 3,
-    "contaminant1": {
+    "contaminant2": {
       "x": 1,
       "y": 1,
       "direction": "UP",
@@ -42,12 +52,17 @@
     "initialCoinsOnField": 0,
     "shouldTurnOff": false,
     "canMove": true,
-    "amountOfCoinsToPlace": 10
+    "expectedEndPosition": {
+      "x": 0,
+      "y": 1
+    },
+    "expectedEndDirection": "LEFT",
+    "amountOfCoinsToPlace": 2
   },
   {
     "worldWidth": 3,
     "worldHeight": 3,
-    "contaminant1": {
+    "contaminant2": {
       "x": 1,
       "y": 1,
       "direction": "UP",
@@ -57,29 +72,17 @@
     "initialCoinsOnField": 0,
     "shouldTurnOff": false,
     "canMove": true,
-    "amountOfCoinsToPlace": 69
-  },
-  {
-    "worldWidth": 3,
-    "worldHeight": 3,
-    "contaminant1": {
-      "x": 1,
-      "y": 1,
-      "direction": "UP",
-      "numberOfCoins": 1337
+    "expectedEndPosition": {
+      "x": 0,
+      "y": 1
     },
-    "walls": [],
-    "initialCoinsOnField": 0,
-    "shouldTurnOff": false,
-    "canMove": true,
-    "amountOfCoinsToPlace": 69,
-    "CONTAMINANT_ONE_MIN_PUT_COINS": 12,
-    "CONTAMINANT_ONE_MAX_PUT_COINS": 100
+    "expectedEndDirection": "LEFT",
+    "amountOfCoinsToPlace": 2
   },
   {
     "worldWidth": 3,
     "worldHeight": 3,
-    "contaminant1": {
+    "contaminant2": {
       "x": 1,
       "y": 1,
       "direction": "UP",
@@ -89,21 +92,11 @@
     "initialCoinsOnField": 17,
     "shouldTurnOff": false,
     "canMove": true,
-    "amountOfCoinsToPlace": 6
-  },
-  {
-    "worldWidth": 3,
-    "worldHeight": 3,
-    "contaminant1": {
-      "x": 1,
-      "y": 1,
-      "direction": "UP",
-      "numberOfCoins": 0
+    "expectedEndPosition": {
+      "x": 0,
+      "y": 1
     },
-    "walls": [],
-    "initialCoinsOnField": 17,
-    "shouldTurnOff": false,
-    "canMove": true,
-    "amountOfCoinsToPlace": 6
+    "expectedEndDirection": "LEFT",
+    "amountOfCoinsToPlace": 2
   }
 ]

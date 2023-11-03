@@ -37,20 +37,21 @@ public class Contaminant1Test extends ContaminantRobotTest {
         setupWorld(worldWidth, worldHeight);
         final Contaminant1 contaminant1 = params.get("contaminant1");
         final Point initialRobotPosition = new Point(contaminant1.getX(), contaminant1.getY());
+        final Direction initialRobotDirection = contaminant1.getDirection();
         final Set<Direction> walls = new HashSet<>(params.<List<Direction>>get("walls"));
         final var initialCoinsOnField = params.getInt("initialCoinsOnField");
         final var shouldTurnOff = params.getBoolean("shouldTurnOff");
         final var canMove = params.getBoolean("canMove");
         final int shouldPlaceCoins = params.get("amountOfCoinsToPlace");
-        GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS=TestUtils.getPropertyOrDefault(
+        GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS = TestUtils.getPropertyOrDefault(
             params,
             "CONTAMINANT_ONE_MIN_PUT_COINS",
             1
         );
-        GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS=TestUtils.getPropertyOrDefault(
+        GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS = TestUtils.getPropertyOrDefault(
             params,
             "CONTAMINANT_ONE_MAX_PUT_COINS",
-            1
+            5
         );
 
         final List<String> ignoreParams = new ArrayList<>();
@@ -101,7 +102,7 @@ public class Contaminant1Test extends ContaminantRobotTest {
                 context,
                 r -> "The Method handleInput threw an exception"
             );
-            if (verifyCoinAmount) {
+            if (verifyCoinAmount && !shouldTurnOff && initialRobotCoinAmount != 0) {
                 utilsMock.verify(() -> Utils.getRandomInteger(
                     GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS,
                     GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS
@@ -125,6 +126,12 @@ public class Contaminant1Test extends ContaminantRobotTest {
                     context,
                     r -> "invalid end position. The robot should not move."
                 );
+                Assertions2.assertEquals(
+                    initialRobotDirection,
+                    contaminant1.getDirection(),
+                    context,
+                    r -> "invalid end direction. The robot should not move."
+                );
             } else {
                 final double movementDistance = Math.sqrt(
                     Math.pow(contaminant1.getX() - initialRobotPosition.x, 2)
@@ -138,7 +145,14 @@ public class Contaminant1Test extends ContaminantRobotTest {
             }
         }
         if (verifyCoinAmount) {
-            verifyCoinAmount(initialCoinsOnField, initialRobotCoinAmount, shouldPlaceCoins, contaminant1, context, initialRobotPosition);
+            verifyCoinAmount(
+                initialCoinsOnField,
+                initialRobotCoinAmount,
+                shouldPlaceCoins,
+                contaminant1,
+                context,
+                initialRobotPosition
+            );
         }
     }
 
@@ -156,7 +170,7 @@ public class Contaminant1Test extends ContaminantRobotTest {
 
     @ParameterizedTest
     @JsonParameterSetTest(value = "Contaminant1TestMovement.json", customConverters = "customConverters")
-    public void testMovement(final JsonParameterSet params) {
+    public void testTheMovement(final JsonParameterSet params) {
         testMovement(params, false, true, false, false);
     }
 

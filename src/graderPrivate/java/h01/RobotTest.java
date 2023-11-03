@@ -40,9 +40,10 @@ public abstract class RobotTest {
 
     /**
      * Places Walls in the given directions at the given position.
+     *
      * @param walls The directions to place walls in.
-     * @param x The x coordinate of the position to place the walls at.
-     * @param y The y coordinate of the position to place the walls at.
+     * @param x     The x coordinate of the position to place the walls at.
+     * @param y     The y coordinate of the position to place the walls at.
      */
     protected static void placeWalls(final Set<Direction> walls, final int x, final int y) {
         // Set Walls
@@ -58,7 +59,8 @@ public abstract class RobotTest {
 
     /**
      * Creates a world with the given width and height and sets the GameConstants accordingly.
-     * @param worldWidth The width of the world.
+     *
+     * @param worldWidth  The width of the world.
      * @param worldHeight The height of the world.
      */
     protected static void setupWorld(final int worldWidth, final int worldHeight) {
