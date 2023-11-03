@@ -46,6 +46,29 @@
     "expectedRobotCoinDelta": 0
   },
   {
+    "worldWidth": 10,
+    "worldHeight": 10,
+    "cleaningRobot": {
+      "x": 9,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 10
+    },
+    "walls": ["UP"],
+    "initialCoinsOnField": 10,
+    "direction": 2,
+    "shouldPutCoins": false,
+    "shouldPickCoins": false,
+    "shouldMove": true,
+    "canMove": true,
+    "expectedEndPosition": {
+      "x": 9,
+      "y": 0
+    },
+    "expectedEndDirection": "DOWN",
+    "expectedRobotCoinDelta": 0
+  },
+  {
     "worldWidth": 1,
     "worldHeight": 1,
     "cleaningRobot": {

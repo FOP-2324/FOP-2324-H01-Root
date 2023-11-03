@@ -95,7 +95,7 @@ public class Contaminant1Test extends ContaminantRobotTest {
                 if (min == GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS && max == GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS) {
                     return shouldPlaceCoins;
                 }
-                return new Random().nextInt(max - min + 1) + min;
+                return Utils.rnd.nextInt(max - min + 1) + min;
             });
             Assertions2.call(
                 contaminant1::doMove,

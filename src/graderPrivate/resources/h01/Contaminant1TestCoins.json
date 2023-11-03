@@ -57,7 +57,9 @@
     "initialCoinsOnField": 0,
     "shouldTurnOff": false,
     "canMove": true,
-    "amountOfCoinsToPlace": 69
+    "amountOfCoinsToPlace": 69,
+    "CONTAMINANT_ONE_MIN_PUT_COINS": 12,
+    "CONTAMINANT_ONE_MAX_PUT_COINS": 100
   },
   {
     "worldWidth": 3,
