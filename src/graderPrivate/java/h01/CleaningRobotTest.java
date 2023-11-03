@@ -3,6 +3,7 @@ package h01;
 import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
 import fopbot.World;
+import h01.template.GameConstants;
 import h01.template.Utils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
@@ -64,6 +65,8 @@ public class CleaningRobotTest {
         final int worldWidth = params.getInt("worldWidth");
         final int worldHeight = params.getInt("worldHeight");
         World.setSize(worldWidth, worldHeight);
+        GameConstants.WORLD_WIDTH = worldWidth;
+        GameConstants.WORLD_HEIGHT = worldHeight;
         if (SHOW_WORLD) {
             World.setDelay(WORLD_DELAY);
             World.setVisible(true);
@@ -80,6 +83,9 @@ public class CleaningRobotTest {
         final Point expectedEndPosition = params.get("expectedEndPosition");
         final Direction expectedEndDirection = params.get("expectedEndDirection");
         final int expectedRobotCoinDelta = params.get("expectedRobotCoinDelta");
+        GameConstants.CLEANER_CAPACITY = params.availableKeys().contains("CLEANER_CAPACITY")
+            ? params.getInt("CLEANER_CAPACITY")
+            : 25;
 
         final List<String> ignoreParams = new ArrayList<>();
         if (!verifyMovement) {
@@ -91,8 +97,19 @@ public class CleaningRobotTest {
         if (!verifyCoinAmount) {
             ignoreParams.add("expectedRobotCoinDelta");
         }
+        ignoreParams.add("CLEANER_CAPACITY");
+        ignoreParams.add("cleaningRobot");
 
-        final var context = params.toContext(ignoreParams.toArray(String[]::new));
+        final var ParamsContext = params.toContext(ignoreParams.toArray(String[]::new));
+        final var cb = Assertions2
+            .contextBuilder()
+            .add(ParamsContext)
+            .add("cleaningRobot (before call)", cleaningRobot.toString())
+            .add("cleaningRobot (after call)", cleaningRobot);
+        if (verifyCoinAmount) {
+            cb.add("CLEANER_CAPACITY", GameConstants.CLEANER_CAPACITY);
+        }
+        final var context = cb.build();
 
         final var initialRobotCoinAmount = cleaningRobot.getNumberOfCoins();
 

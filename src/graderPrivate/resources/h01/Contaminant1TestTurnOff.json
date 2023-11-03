@@ -1,0 +1,32 @@
+[
+  {
+    "worldWidth": 3,
+    "worldHeight": 3,
+    "contaminant1": {
+      "x": 1,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 1
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "shouldTurnOff": false,
+    "canMove": true,
+    "amountOfCoinsToPlace": 1
+  },
+  {
+    "worldWidth": 3,
+    "worldHeight": 3,
+    "contaminant1": {
+      "x": 1,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 0
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "shouldTurnOff": true,
+    "canMove": true,
+    "amountOfCoinsToPlace": 5
+  }
+]

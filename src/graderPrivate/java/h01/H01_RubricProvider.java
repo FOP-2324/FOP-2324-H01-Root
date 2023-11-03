@@ -4,6 +4,8 @@ import org.sourcegrade.jagr.api.rubric.Criterion;
 import org.sourcegrade.jagr.api.rubric.JUnitTestRef;
 import org.sourcegrade.jagr.api.rubric.Rubric;
 import org.sourcegrade.jagr.api.rubric.RubricProvider;
+import org.sourcegrade.jagr.api.testing.RubricConfiguration;
+import org.tudalgo.algoutils.transform.AccessTransformer;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 
 import static org.tudalgo.algoutils.tutor.general.jagr.RubricUtils.criterion;
@@ -56,16 +58,32 @@ public class H01_RubricProvider implements RubricProvider {
                         .shortDescription("H2.1 | Contaminant1")
                         .addChildCriteria(
                             criterion(
-                                "Der \"Contaminant1\"-Roboter legt korrekt eine zufällige Anzahl an Münzen ab, genau dann wenn er es soll."
+                                "Wenn der \"Contaminant1\"-Roboter keine Münzen mehr hat, wird er ausgeschaltet und die Methode doMove() führt keine weiteren Aktionen aus.",
+                                JUnitTestRef.ofMethod(() -> Contaminant1Test.class.getDeclaredMethod(
+                                    "testTurnOff",
+                                    JsonParameterSet.class
+                                ))
                             ),
                             criterion(
-                                "Der \"Contaminant1\"-Roboter prüft alle vier Richtungen ab und dreht sich wieder in die Ausgangsrichtung."
+                                "Der \"Contaminant1\"-Roboter legt korrekt eine zufällige Anzahl an Münzen ab, genau dann wenn er es soll.",
+                                JUnitTestRef.ofMethod(() -> Contaminant1Test.class.getDeclaredMethod(
+                                    "testCoins",
+                                    JsonParameterSet.class
+                                ))
                             ),
                             criterion(
-                                "Der \"Contaminant1\"-Roboter bewegt sich korrekt in eine zufällige Richtung, die frei ist, falls eine solche existiert."
+                                "Der \"Contaminant1\"-Roboter prüft alle vier Richtungen ab und dreht sich wieder in die Ausgangsrichtung.",
+                                JUnitTestRef.ofMethod(() -> Contaminant1Test.class.getDeclaredMethod(
+                                    "testRotation",
+                                    JsonParameterSet.class
+                                ))
                             ),
                             criterion(
-                                "Die Bewegung des \"Contaminant1\"-Roboters ist vollständig korrekt."
+                                "Der \"Contaminant1\"-Roboter bewegt sich korrekt in eine zufällige Richtung, die frei ist, falls eine solche existiert.",
+                                JUnitTestRef.ofMethod(() -> Contaminant1Test.class.getDeclaredMethod(
+                                    "testMovement",
+                                    JsonParameterSet.class
+                                ))
                             )
                         )
                         .build(),
@@ -110,5 +128,10 @@ public class H01_RubricProvider implements RubricProvider {
     @Override
     public Rubric getRubric() {
         return RUBRIC;
+    }
+
+    @Override
+    public void configure(final RubricConfiguration configuration) {
+        configuration.addTransformer(new AccessTransformer());
     }
 }

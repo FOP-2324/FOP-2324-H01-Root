@@ -1,0 +1,77 @@
+[
+  {
+    "worldWidth": 3,
+    "worldHeight": 3,
+    "contaminant1": {
+      "x": 1,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 10
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "shouldTurnOff": false,
+    "canMove": true,
+    "amountOfCoinsToPlace": 5
+  },
+  {
+    "worldWidth": 3,
+    "worldHeight": 3,
+    "contaminant1": {
+      "x": 1,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 1
+    },
+    "walls": [],
+    "initialCoinsOnField": 10,
+    "shouldTurnOff": false,
+    "canMove": true,
+    "amountOfCoinsToPlace": 5
+  },
+  {
+    "worldWidth": 3,
+    "worldHeight": 3,
+    "contaminant1": {
+      "x": 1,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 10
+    },
+    "walls": [],
+    "initialCoinsOnField": 0,
+    "shouldTurnOff": false,
+    "canMove": true,
+    "amountOfCoinsToPlace": 10
+  },
+  {
+    "worldWidth": 3,
+    "worldHeight": 3,
+    "contaminant1": {
+      "x": 1,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 1337
+    },
+    "walls": [],
+    "initialCoinsOnField": 0,
+    "shouldTurnOff": false,
+    "canMove": true,
+    "amountOfCoinsToPlace": 69
+  },
+  {
+    "worldWidth": 3,
+    "worldHeight": 3,
+    "contaminant1": {
+      "x": 1,
+      "y": 1,
+      "direction": "UP",
+      "numberOfCoins": 420
+    },
+    "walls": [],
+    "initialCoinsOnField": 17,
+    "shouldTurnOff": false,
+    "canMove": true,
+    "amountOfCoinsToPlace": 6
+  }
+]
