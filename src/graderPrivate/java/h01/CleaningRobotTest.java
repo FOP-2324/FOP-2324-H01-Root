@@ -1,6 +1,5 @@
 package h01;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
 import fopbot.World;
 import h01.template.GameConstants;
@@ -13,40 +12,15 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-
-import static h01.TestConstants.SHOW_WORLD;
-import static h01.TestConstants.WORLD_DELAY;
+import java.util.Set;
 
 /**
  * Tests for the {@link CleaningRobot} class.
  */
 @TestForSubmission
-public class CleaningRobotTest {
-
-    /**
-     * The custom converters for this test class.
-     */
-    @SuppressWarnings("unused")
-    public static final Map<String, Function<JsonNode, ?>> customConverters = Map.ofEntries(
-        Map.entry("worldWidth", JsonNode::asInt),
-        Map.entry("worldHeight", JsonNode::asInt),
-        Map.entry("cleaningRobot", JsonConverters::toCleaningRobot),
-        Map.entry("walls", n -> JsonConverters.toList(n, JsonConverters::toDirection)),
-        Map.entry("initialCoinsOnField", JsonNode::asInt),
-        Map.entry("contaminant1", JsonConverters::toContaminant1),
-        Map.entry("contaminant2", JsonConverters::toContaminant2),
-        Map.entry("direction", JsonNode::asInt),
-        Map.entry("shouldMove", JsonNode::asBoolean),
-        Map.entry("canMove", JsonNode::asBoolean),
-        Map.entry("shouldPutCoins", JsonNode::asBoolean),
-        Map.entry("shouldPickCoins", JsonNode::asBoolean),
-        Map.entry("expectedEndPosition", JsonConverters::toPoint),
-        Map.entry("expectedEndDirection", JsonConverters::toDirection),
-        Map.entry("expectedRobotCoinDelta", JsonNode::asInt)
-    );
+public class CleaningRobotTest extends RobotTest {
 
     /**
      * Tests the {@link CleaningRobot#handleKeyInput(int, boolean, boolean)} method.
@@ -64,17 +38,11 @@ public class CleaningRobotTest {
     ) {
         final int worldWidth = params.getInt("worldWidth");
         final int worldHeight = params.getInt("worldHeight");
-        World.setSize(worldWidth, worldHeight);
-        GameConstants.WORLD_WIDTH = worldWidth;
-        GameConstants.WORLD_HEIGHT = worldHeight;
-        if (SHOW_WORLD) {
-            World.setDelay(WORLD_DELAY);
-            World.setVisible(true);
-        }
+        setupWorld(worldWidth, worldHeight);
         final CleaningRobot cleaningRobot = params.get("cleaningRobot");
         final Point initialRobotPosition = new Point(cleaningRobot.getX(), cleaningRobot.getY());
         final int direction = params.get("direction");
-        final List<Direction> walls = params.get("walls");
+        final Set<Direction> walls = new HashSet<>(params.<List<Direction>>get("walls"));
         final var initialCoinsOnField = params.getInt("initialCoinsOnField");
         final var shouldPutCoins = params.getBoolean("shouldPutCoins");
         final var shouldPickCoins = params.getBoolean("shouldPickCoins");
@@ -83,10 +51,7 @@ public class CleaningRobotTest {
         final Point expectedEndPosition = params.get("expectedEndPosition");
         final Direction expectedEndDirection = params.get("expectedEndDirection");
         final int expectedRobotCoinDelta = params.get("expectedRobotCoinDelta");
-        GameConstants.CLEANER_CAPACITY = params.availableKeys().contains("CLEANER_CAPACITY")
-            ? params.getInt("CLEANER_CAPACITY")
-            : 25;
-
+        GameConstants.CLEANER_CAPACITY = TestUtils.getPropertyOrDefault(params, "CLEANER_CAPACITY", 25);
         final List<String> ignoreParams = new ArrayList<>();
         if (!verifyMovement) {
             ignoreParams.add("expectedEndPosition");
@@ -113,15 +78,7 @@ public class CleaningRobotTest {
 
         final var initialRobotCoinAmount = cleaningRobot.getNumberOfCoins();
 
-        // Set Walls
-        for (Direction wall : walls) {
-            final var directionVector = TestUtils.toUnitVector(wall);
-            if (directionVector.x == 0) {
-                World.placeHorizontalWall(cleaningRobot.getX(), cleaningRobot.getY() + Math.min(0, directionVector.y));
-            } else {
-                World.placeVerticalWall(cleaningRobot.getX() + Math.min(0, directionVector.x), cleaningRobot.getY());
-            }
-        }
+        placeWalls(walls, cleaningRobot.getX(),cleaningRobot.getY());
 
         // Set Coins
         if (initialCoinsOnField > 0) {

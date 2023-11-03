@@ -1,8 +1,6 @@
 package h01;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
-import fopbot.Transition;
 import fopbot.World;
 import h01.template.GameConstants;
 import h01.template.Utils;
@@ -13,14 +11,8 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.function.Function;
+import java.util.*;
 
-import static h01.TestConstants.SHOW_WORLD;
-import static h01.TestConstants.WORLD_DELAY;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.atLeastOnce;
@@ -30,39 +22,9 @@ import static org.mockito.Mockito.mockStatic;
  * Tests for the {@link Contaminant1} class.
  */
 @TestForSubmission
-public class Contaminant1Test {
+public class Contaminant1Test extends ContaminantRobotTest {
 
-    /**
-     * The custom converters for this test class.
-     */
-    @SuppressWarnings("unused")
-    public static final Map<String, Function<JsonNode, ?>> customConverters = Map.ofEntries(
-        Map.entry("worldWidth", JsonNode::asInt),
-        Map.entry("worldHeight", JsonNode::asInt),
-        Map.entry("cleaningRobot", JsonConverters::toCleaningRobot),
-        Map.entry("walls", n -> JsonConverters.toList(n, JsonConverters::toDirection)),
-        Map.entry("initialCoinsOnField", JsonNode::asInt),
-        Map.entry("contaminant1", JsonConverters::toContaminant1),
-        Map.entry("contaminant2", JsonConverters::toContaminant2),
-        Map.entry("direction", JsonNode::asInt),
-        Map.entry("shouldMove", JsonNode::asBoolean),
-        Map.entry("canMove", JsonNode::asBoolean),
-        Map.entry("shouldPutCoins", JsonNode::asBoolean),
-        Map.entry("shouldPickCoins", JsonNode::asBoolean),
-        Map.entry("expectedEndPosition", JsonConverters::toPoint),
-        Map.entry("expectedEndDirection", JsonConverters::toDirection),
-        Map.entry("expectedRobotCoinDelta", JsonNode::asInt)
-    );
-
-    /**
-     * Tests the {@link Contaminant1#doMove()} method.
-     *
-     * @param params            The {@link JsonParameterSet} to use for the test.
-     * @param verifyTurnaround  Whether to verify that the robot turns around to scan for blocked paths.
-     * @param verifyMovement    Whether to verify the movement.
-     * @param verifyCoinAmount  Whether to verify the coin amount.
-     * @param verifyPowerStatus Whether to verify whether the robot is turned on or off.
-     */
+    @Override
     public void testMovement(
         final JsonParameterSet params,
         final boolean verifyTurnaround,
@@ -72,26 +34,24 @@ public class Contaminant1Test {
     ) {
         final int worldWidth = params.getInt("worldWidth");
         final int worldHeight = params.getInt("worldHeight");
-        GameConstants.WORLD_WIDTH = worldWidth;
-        GameConstants.WORLD_HEIGHT = worldHeight;
-        World.setSize(worldWidth, worldHeight);
-        if (SHOW_WORLD) {
-            World.setDelay(WORLD_DELAY);
-            World.setVisible(true);
-        }
+        setupWorld(worldWidth, worldHeight);
         final Contaminant1 contaminant1 = params.get("contaminant1");
         final Point initialRobotPosition = new Point(contaminant1.getX(), contaminant1.getY());
-        final List<Direction> walls = params.get("walls");
+        final Set<Direction> walls = new HashSet<>(params.<List<Direction>>get("walls"));
         final var initialCoinsOnField = params.getInt("initialCoinsOnField");
         final var shouldTurnOff = params.getBoolean("shouldTurnOff");
         final var canMove = params.getBoolean("canMove");
         final int shouldPlaceCoins = params.get("amountOfCoinsToPlace");
-        GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS = params.availableKeys().contains("CONTAMINANT_ONE_MIN_PUT_COINS")
-            ? params.getInt("CONTAMINANT_ONE_MIN_PUT_COINS")
-            : 1;
-        GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS = params.availableKeys().contains("CONTAMINANT_ONE_MAX_PUT_COINS")
-            ? params.getInt("CONTAMINANT_ONE_MAX_PUT_COINS")
-            : 1;
+        GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS=TestUtils.getPropertyOrDefault(
+            params,
+            "CONTAMINANT_ONE_MIN_PUT_COINS",
+            1
+        );
+        GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS=TestUtils.getPropertyOrDefault(
+            params,
+            "CONTAMINANT_ONE_MAX_PUT_COINS",
+            1
+        );
 
         final List<String> ignoreParams = new ArrayList<>();
 
@@ -120,15 +80,7 @@ public class Contaminant1Test {
 
         final var initialRobotCoinAmount = contaminant1.getNumberOfCoins();
 
-        // Set Walls
-        for (final Direction wall : walls) {
-            final var directionVector = TestUtils.toUnitVector(wall);
-            if (directionVector.x == 0) {
-                World.placeHorizontalWall(contaminant1.getX(), contaminant1.getY() + Math.min(0, directionVector.y));
-            } else {
-                World.placeVerticalWall(contaminant1.getX() + Math.min(0, directionVector.x), contaminant1.getY());
-            }
-        }
+        placeWalls(walls, contaminant1.getX(), contaminant1.getY());
 
         // Set Coins
         if (initialCoinsOnField > 0) {
@@ -158,36 +110,11 @@ public class Contaminant1Test {
         }
 
         if (verifyPowerStatus) {
-            Assertions2.assertEquals(
-                shouldTurnOff,
-                contaminant1.isTurnedOff(),
-                context,
-                r -> String.format("The robot should be turned %s.", shouldTurnOff ? "off" : "on")
-            );
+            verifyPowerStatus(shouldTurnOff, contaminant1, context);
         }
 
         if (verifyTurnaround) {
-            final var firstFourMovements = World.getGlobalWorld()
-                .getTrace(contaminant1)
-                .getTransitions()
-                .stream()
-                .filter(t -> List.of(
-                        Transition.RobotAction.MOVE,
-                        Transition.RobotAction.TURN_LEFT,
-                        Transition.RobotAction.SET_X,
-                        Transition.RobotAction.SET_Y
-                    ).contains(t.action)
-                )
-                .limit(4)
-                .toList();
-            Assertions2.assertTrue(
-                firstFourMovements.stream().allMatch(t -> t.action == Transition.RobotAction.TURN_LEFT),
-                context,
-                r -> String.format(
-                    "The first four movements should be turning left. Actual first four movements are: %s",
-                    firstFourMovements.stream().map(t -> t.action).toList()
-                )
-            );
+            verifyTurnaround(contaminant1, context);
         }
 
         if (verifyMovement) {
@@ -211,34 +138,7 @@ public class Contaminant1Test {
             }
         }
         if (verifyCoinAmount) {
-            final int maxCoinAmount = 20;
-            final int expectedCoinAmount = Math.min(
-                Math.min(
-                    initialCoinsOnField + initialRobotCoinAmount,
-                    initialCoinsOnField + shouldPlaceCoins
-                ),
-                maxCoinAmount
-            );
-            final int expectedPlaceCoinAmount = expectedCoinAmount - initialCoinsOnField;
-            // Check Robot Coin Amount
-            Assertions2.assertEquals(
-                initialRobotCoinAmount - expectedPlaceCoinAmount,
-                contaminant1.getNumberOfCoins(),
-                context,
-                r -> String.format("The robot should have %d coins.", initialRobotCoinAmount - expectedPlaceCoinAmount)
-            );
-            // Check Field Coin Amount
-            Assertions2.assertEquals(
-                expectedCoinAmount,
-                Utils.getCoinAmount(initialRobotPosition.x, initialRobotPosition.y),
-                context,
-                r -> String.format(
-                    "The field at (%d, %d) should have %d coins.",
-                    initialRobotPosition.x,
-                    initialRobotPosition.y,
-                    expectedCoinAmount
-                )
-            );
+            verifyCoinAmount(initialCoinsOnField, initialRobotCoinAmount, shouldPlaceCoins, contaminant1, context, initialRobotPosition);
         }
     }
 
