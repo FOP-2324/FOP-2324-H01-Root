@@ -126,15 +126,36 @@ public class H01_RubricProvider implements RubricProvider {
                 .shortDescription("H3 | Gewinnbedingungen")
                 .addChildCriteria(
                     criterion(
-                        "Der cleaner gewinnt, wenn alle Contaminants ausgeschaltet sind."
-                    ), criterion(
-                        "Der cleaner gewinnt, wenn sich in der Abladezone mindestens 200 Münzen befinden."
+                        "Der cleaner gewinnt, wenn alle Contaminants ausgeschaltet sind.",
+                        JUnitTestRef.ofMethod(
+                            () -> GameControllerTest.class.getDeclaredMethod(
+                                "testCleaningRobotWinByEndurance",
+                                boolean.class,
+                                boolean.class
+                            ))
                     ),
                     criterion(
-                        "Die Contaminants gewinnen, wenn mindestens 50% der Felder mit münzen bedeckt sind."
+                        "Der cleaner gewinnt, wenn sich in der Abladezone mindestens 200 Münzen befinden.",
+                        JUnitTestRef.ofMethod(
+                            () -> GameControllerTest.class.getDeclaredMethod(
+                                "testCleaningRobotWinByDumpingArea",
+                                int.class
+                            ))
                     ),
                     criterion(
-                        "Wenn beide Parteien gleichzeitig gewinnen, so gewinnt der cleaner."
+                        "Die Contaminants gewinnen, wenn mindestens 50% der Felder mit münzen bedeckt sind.",
+                        JUnitTestRef.ofMethod(
+                            () -> GameControllerTest.class.getDeclaredMethod(
+                                "testContaminantsWin",
+                                int.class,
+                                int.class
+                            ))
+                    ),
+                    criterion(
+                        "Wenn beide Parteien gleichzeitig gewinnen, so gewinnt der cleaner.",
+                        JUnitTestRef.ofMethod(
+                            () -> GameControllerTest.class.getDeclaredMethod(
+                                "testContaminantsWin", int.class, int.class))
                     )
                 )
                 .build()

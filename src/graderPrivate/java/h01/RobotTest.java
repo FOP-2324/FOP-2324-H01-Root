@@ -3,14 +3,10 @@ package h01;
 import com.fasterxml.jackson.databind.JsonNode;
 import fopbot.Direction;
 import fopbot.World;
-import h01.template.GameConstants;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-
-import static h01.TestConstants.SHOW_WORLD;
-import static h01.TestConstants.WORLD_DELAY;
 
 /**
  * Base class for all robot tests.
@@ -57,19 +53,4 @@ public abstract class RobotTest {
         }
     }
 
-    /**
-     * Creates a world with the given width and height and sets the GameConstants accordingly.
-     *
-     * @param worldWidth  The width of the world.
-     * @param worldHeight The height of the world.
-     */
-    protected static void setupWorld(final int worldWidth, final int worldHeight) {
-        World.setSize(worldWidth, worldHeight);
-        GameConstants.WORLD_WIDTH = worldWidth;
-        GameConstants.WORLD_HEIGHT = worldHeight;
-        if (SHOW_WORLD) {
-            World.setDelay(WORLD_DELAY);
-            World.setVisible(true);
-        }
-    }
 }

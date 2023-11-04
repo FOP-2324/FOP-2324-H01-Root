@@ -2,8 +2,6 @@ package h01;
 
 import fopbot.Direction;
 import fopbot.World;
-import h01.template.GameConstants;
-import h01.template.Utils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -11,12 +9,10 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import java.awt.Point;
-import java.util.*;
-
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mockStatic;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Tests for the {@link Contaminant2} class.
@@ -34,7 +30,7 @@ public class Contaminant2Test extends ContaminantRobotTest {
     ) {
         final int worldWidth = params.getInt("worldWidth");
         final int worldHeight = params.getInt("worldHeight");
-        setupWorld(worldWidth, worldHeight);
+        TestUtils.setupWorld(worldWidth, worldHeight);
         final Contaminant2 contaminant2 = params.get("contaminant2");
         final Point initialRobotPosition = new Point(contaminant2.getX(), contaminant2.getY());
         final Direction initialRobotDirection = contaminant2.getDirection();

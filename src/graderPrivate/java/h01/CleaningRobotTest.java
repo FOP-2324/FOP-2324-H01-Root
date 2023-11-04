@@ -38,7 +38,7 @@ public class CleaningRobotTest extends RobotTest {
     ) {
         final int worldWidth = params.getInt("worldWidth");
         final int worldHeight = params.getInt("worldHeight");
-        setupWorld(worldWidth, worldHeight);
+        TestUtils.setupWorld(worldWidth, worldHeight);
         final CleaningRobot cleaningRobot = params.get("cleaningRobot");
         final Point initialRobotPosition = new Point(cleaningRobot.getX(), cleaningRobot.getY());
         final int direction = params.get("direction");

@@ -34,7 +34,7 @@ public class Contaminant1Test extends ContaminantRobotTest {
     ) {
         final int worldWidth = params.getInt("worldWidth");
         final int worldHeight = params.getInt("worldHeight");
-        setupWorld(worldWidth, worldHeight);
+        TestUtils.setupWorld(worldWidth, worldHeight);
         final Contaminant1 contaminant1 = params.get("contaminant1");
         final Point initialRobotPosition = new Point(contaminant1.getX(), contaminant1.getY());
         final Direction initialRobotDirection = contaminant1.getDirection();

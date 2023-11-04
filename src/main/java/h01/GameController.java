@@ -2,7 +2,6 @@ package h01;
 
 import fopbot.Robot;
 import fopbot.World;
-import h01.template.Contaminant;
 import h01.template.GameControllerBase;
 import h01.template.Utils;
 
@@ -25,6 +24,7 @@ public class GameController extends GameControllerBase {
         if (getContaminant1().isTurnedOff() && getContaminant2().isTurnedOff()) {
             System.out.println("Cleaning robot won!");
             stopGame();
+            return;
         }
         // if more than 50% of all fields are dirty, the game is lost
         int dirtyFields = 0;
@@ -41,9 +41,10 @@ public class GameController extends GameControllerBase {
             getContaminant2().turnOff();
             System.out.println("Cleaning robot won!");
             stopGame();
+            return;
         }
 
-        if (dirtyFields >= World.getWidth() * World.getHeight() / 2) {
+        if (dirtyFields >= (double) World.getWidth() * World.getHeight() / 2) {
             getCleaningRobot().turnOff();
             System.out.println("Contaminants won!");
             stopGame();
