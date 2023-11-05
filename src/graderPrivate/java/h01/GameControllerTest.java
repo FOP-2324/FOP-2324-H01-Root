@@ -5,8 +5,6 @@ import h01.template.GameConstants;
 import h01.template.MazeGenerator;
 import h01.template.Utils;
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.cartesian.CartesianTest;
-import org.junitpioneer.jupiter.params.IntRangeSource;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
@@ -19,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * Tests for the {@link GameController} class.
@@ -301,60 +300,47 @@ public class GameControllerTest {
             .build();
     }
 
-    /**
-     * Tests the {@link GameController#checkWinCondition()} method.
-     *
-     * @param contaminant1TurnedOff Whether the contaminant 1 is turned off.
-     * @param contaminant2TurnedOff Whether the contaminant 2 is turned off.
-     */
-    @CartesianTest
-    public void testCleaningRobotWinByEndurance(
-        @CartesianTest.Values(booleans = {true, false}) final boolean contaminant1TurnedOff,
-        @CartesianTest.Values(booleans = {true, false}) final boolean contaminant2TurnedOff
-    ) {
-        testGameController(3, 3, gc -> {
-            if (contaminant1TurnedOff) {
-                gc.getContaminant1().setNumberOfCoins(0);
-                gc.getContaminant1().turnOff();
-            }
-            if (contaminant2TurnedOff) {
-                gc.getContaminant2().setNumberOfCoins(0);
-                gc.getContaminant2().turnOff();
-            }
-        });
+    @Test
+    public void testCleaningRobotWinByEndurance() {
+        Stream.of(true, false)
+            .forEach(contaminant1TurnedOff -> Stream.of(true, false)
+                .forEach(contaminant2TurnedOff -> testGameController(3, 3, gc -> {
+                    if (contaminant1TurnedOff) {
+                        gc.getContaminant1().setNumberOfCoins(0);
+                        gc.getContaminant1().turnOff();
+                    }
+                    if (contaminant2TurnedOff) {
+                        gc.getContaminant2().setNumberOfCoins(0);
+                        gc.getContaminant2().turnOff();
+                    }
+                })
+                )
+            );
     }
 
-    /**
-     * Tests that the cleaning robot wins if the dumping area contains at least 200 coins.
-     *
-     * @param coinsInDumpingArea The number of coins in the dumping area.
-     */
-    @CartesianTest
+    @Test
     public void testCleaningRobotWinByDumpingArea(
-        @IntRangeSource(from = 0, to = 300, step = 50, closed = true) final int coinsInDumpingArea
     ) {
-        testGameController(3, 3, gc -> {
-            if (coinsInDumpingArea > 0) {
-                World.getGlobalWorld().putCoins(0, World.getHeight() - 1, coinsInDumpingArea);
-            }
-        });
+        for (int coinsInDumpingArea = 0; coinsInDumpingArea <= 300; coinsInDumpingArea += 50) {
+            final int finalCoinsInDumpingArea = coinsInDumpingArea;
+            testGameController(3, 3, gc -> {
+                if (finalCoinsInDumpingArea > 0) {
+                    World.getGlobalWorld().putCoins(0, World.getHeight() - 1, finalCoinsInDumpingArea);
+                }
+            });
+        }
     }
 
-    /**
-     * Tests that the contaminants win if at least 50% of all fields are dirty.
-     *
-     * @param worldWidth  The width of the world.
-     * @param worldHeight The height of the world.
-     */
-    @CartesianTest
-    public void testContaminantsWin(
-        @IntRangeSource(from = 1, to = 10) final int worldWidth,
-        @IntRangeSource(from = 1, to = 10) final int worldHeight
-    ) {
-        final int amountOfFields = worldWidth * worldHeight;
-        for (int i = 0; i < amountOfFields; i++) {
-            final int finalI = i;
-            testGameController(worldWidth, worldHeight, gc -> setAmountOfDirtyFields(finalI));
+    @Test
+    public void testContaminantsWin() {
+        for (int worldHeight = 0; worldHeight < 10; worldHeight++) {
+            for (int worldWidth = 0; worldWidth < 10; worldWidth++) {
+                final int amountOfFields = worldWidth * worldHeight;
+                for (int i = 0; i < amountOfFields; i++) {
+                    final int finalI = i;
+                    testGameController(worldWidth, worldHeight, gc -> setAmountOfDirtyFields(finalI));
+                }
+            }
         }
     }
 

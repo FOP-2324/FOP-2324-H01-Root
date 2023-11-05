@@ -1,5 +1,6 @@
 package h01;
 
+import h01.template.GameConstants;
 import org.sourcegrade.jagr.api.rubric.Criterion;
 import org.sourcegrade.jagr.api.rubric.JUnitTestRef;
 import org.sourcegrade.jagr.api.rubric.Rubric;
@@ -129,33 +130,25 @@ public class H01_RubricProvider implements RubricProvider {
                         "Der cleaner gewinnt, wenn alle Contaminants ausgeschaltet sind.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testCleaningRobotWinByEndurance",
-                                boolean.class,
-                                boolean.class
-                            ))
+                                "testCleaningRobotWinByEndurance"))
                     ),
                     criterion(
                         "Der cleaner gewinnt, wenn sich in der Abladezone mindestens 200 Münzen befinden.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testCleaningRobotWinByDumpingArea",
-                                int.class
-                            ))
+                                "testCleaningRobotWinByDumpingArea"))
                     ),
                     criterion(
                         "Die Contaminants gewinnen, wenn mindestens 50% der Felder mit münzen bedeckt sind.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testContaminantsWin",
-                                int.class,
-                                int.class
-                            ))
+                                "testContaminantsWin"))
                     ),
                     criterion(
                         "Wenn beide Parteien gleichzeitig gewinnen, so gewinnt der cleaner.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testContaminantsWin", int.class, int.class))
+                                "testContaminantsWin"))
                     )
                 )
                 .build()
@@ -169,6 +162,7 @@ public class H01_RubricProvider implements RubricProvider {
 
     @Override
     public void configure(final RubricConfiguration configuration) {
+        configuration.addFileNameSolutionOverride(GameConstants.class);
         configuration.addTransformer(new AccessTransformer());
     }
 }
