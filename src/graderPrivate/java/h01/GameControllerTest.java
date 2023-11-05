@@ -7,6 +7,7 @@ import h01.template.Utils;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.cartesian.CartesianTest;
 import org.junitpioneer.jupiter.params.IntRangeSource;
+import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
 /**
  * Tests for the {@link GameController} class.
  */
+@TestForSubmission
 public class GameControllerTest {
 
     /**
@@ -42,6 +44,13 @@ public class GameControllerTest {
         NONE
     }
 
+    /**
+     * Tests the {@link GameController#checkWinCondition()} method.
+     *
+     * @param worldWidth  The width of the world.
+     * @param worldHeight The height of the world.
+     * @param setupWorld  A function to setup the world.
+     */
     public void testGameController(
         final int worldWidth,
         final int worldHeight,
@@ -315,6 +324,11 @@ public class GameControllerTest {
         });
     }
 
+    /**
+     * Tests that the cleaning robot wins if the dumping area contains at least 200 coins.
+     *
+     * @param coinsInDumpingArea The number of coins in the dumping area.
+     */
     @CartesianTest
     public void testCleaningRobotWinByDumpingArea(
         @IntRangeSource(from = 0, to = 300, step = 50, closed = true) final int coinsInDumpingArea
@@ -326,6 +340,12 @@ public class GameControllerTest {
         });
     }
 
+    /**
+     * Tests that the contaminants win if at least 50% of all fields are dirty.
+     *
+     * @param worldWidth  The width of the world.
+     * @param worldHeight The height of the world.
+     */
     @CartesianTest
     public void testContaminantsWin(
         @IntRangeSource(from = 1, to = 10) final int worldWidth,

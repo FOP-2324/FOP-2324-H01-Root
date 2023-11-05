@@ -34,11 +34,14 @@ public class TestUtils {
      */
     protected static void setupWorld(final int worldWidth, final int worldHeight) {
         World.setSize(worldWidth, worldHeight);
+        World.setDelay(0);
         GameConstants.WORLD_WIDTH = worldWidth;
         GameConstants.WORLD_HEIGHT = worldHeight;
         if (SHOW_WORLD) {
             World.setDelay(WORLD_DELAY);
             World.setVisible(true);
+        } else {
+            World.setDelay(0);
         }
     }
 
@@ -86,7 +89,7 @@ public class TestUtils {
      * @param defaultValue the default value to return if the property is not available
      * @param <T>          the type of the property
      * @return the property with the given key from the given {@link JsonParameterSet} or the given default value if the
-     * property is not available
+     *     property is not available
      */
     public static <T> T getPropertyOrDefault(final JsonParameterSet params, final String key, final T defaultValue) {
         return params.availableKeys().contains(key) ? params.get(key) : defaultValue;
