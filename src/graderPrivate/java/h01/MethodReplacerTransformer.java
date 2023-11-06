@@ -56,7 +56,7 @@ public class MethodReplacerTransformer implements ClassTransformer {
                                 super.visitMethodInsn(
                                     opcode,
                                     "h01/MethodReplacements",
-                                    "sleep",
+                                    "showMessageDialog",
                                     descriptor,
                                     isInterface
                                 );

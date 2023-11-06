@@ -21,7 +21,7 @@ public class MethodReplacements {
     /**
      * Intercepts {@link javax.swing.JOptionPane#showMessageDialog(java.awt.Component, Object)} and throws an exception.
      */
-    public void showMessageDialog(final Component parentComponent, final Object message) {
+    public static void showMessageDialog(final Component parentComponent, final Object message) {
         throw new RuntimeException("The use of JOptionPane.showMessageDialog() is not allowed.");
     }
 }
