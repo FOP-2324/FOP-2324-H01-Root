@@ -3,13 +3,24 @@ package h01;
 import fopbot.Direction;
 import fopbot.World;
 import h01.template.GameConstants;
+import h01.template.Utils;
+import org.mockito.MockedStatic;
+import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
+import org.tudalgo.algoutils.tutor.general.assertions.Context;
+import org.tudalgo.algoutils.tutor.general.callable.Callable;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 
+import javax.annotation.Nullable;
 import java.awt.Point;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 import static h01.TestConstants.SHOW_WORLD;
 import static h01.TestConstants.WORLD_DELAY;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 /**
  * Utility methods for the private tests.
@@ -35,6 +46,8 @@ public class TestUtils {
     protected static void setupWorld(final int worldWidth, final int worldHeight) {
         World.setSize(worldWidth, worldHeight);
         World.setDelay(0);
+        //noinspection UnstableApiUsage
+        World.getGlobalWorld().setActionLimit(1024);
         GameConstants.WORLD_WIDTH = worldWidth;
         GameConstants.WORLD_HEIGHT = worldHeight;
         if (SHOW_WORLD) {
@@ -89,9 +102,67 @@ public class TestUtils {
      * @param defaultValue the default value to return if the property is not available
      * @param <T>          the type of the property
      * @return the property with the given key from the given {@link JsonParameterSet} or the given default value if the
-     *     property is not available
+     * property is not available
      */
     public static <T> T getPropertyOrDefault(final JsonParameterSet params, final String key, final T defaultValue) {
         return params.availableKeys().contains(key) ? params.get(key) : defaultValue;
+    }
+
+    /**
+     * Runs a given runnable while mocking the {@link Utils} class.
+     *
+     * @param replaceRndLogic             the logic to replace the random number generator with
+     * @param additionalMockingBeforeCall the additional mocking to do before the runnable is called
+     * @param additionalMockingAfterCall  the additional mocking to do after the runnable is called
+     * @param runnable                    the runnable to run
+     * @param context                     the context to use for the assertions
+     * @param maxAmountOfRandomCalls      the maximum amount of random calls to allow
+     */
+    public static void withMockedUtilsClass(
+        @Nullable final BiFunction<Integer, Integer, Integer> replaceRndLogic,
+        final Consumer<MockedStatic<Utils>> additionalMockingBeforeCall,
+        final Consumer<MockedStatic<Utils>> additionalMockingAfterCall,
+        final Callable runnable,
+        final Context context,
+        final int maxAmountOfRandomCalls
+    ) {
+        try (final var utilsMock = mockStatic(Utils.class, CALLS_REAL_METHODS)) {
+            final AtomicInteger invocations = new AtomicInteger();
+            utilsMock.when(() -> Utils.getRandomInteger(anyInt(), anyInt())).thenAnswer(invocation -> {
+                if (invocations.getAndIncrement() >= maxAmountOfRandomCalls) {
+                    throw new IllegalStateException(String.format(
+                        "Too many random calls (%d were permitted). Likely an infinite loop.",
+                        maxAmountOfRandomCalls
+                    ));
+                }
+                final int min = invocation.getArgument(0);
+                final int max = invocation.getArgument(1);
+                return replaceRndLogic != null
+                    ? replaceRndLogic.apply(min, max)
+                    : Utils.rnd.nextInt(max - min + 1) + min;
+            });
+            additionalMockingBeforeCall.accept(utilsMock);
+            Assertions2.call(
+                runnable,
+                context,
+                r -> "The Method threw an exception"
+            );
+            additionalMockingAfterCall.accept(utilsMock);
+        }
+    }
+
+    /**
+     * Runs a given runnable while mocking the {@link Utils} class.
+     *
+     * @param runnable               the runnable to run
+     * @param context                the context to use for the assertions
+     * @param maxAmountOfRandomCalls the maximum amount of random calls to allow
+     */
+    public static void withMockedUtilsClass(
+        final Callable runnable,
+        final Context context,
+        final int maxAmountOfRandomCalls
+    ) {
+        withMockedUtilsClass(null, mock -> {}, mock -> {}, runnable, context, maxAmountOfRandomCalls);
     }
 }

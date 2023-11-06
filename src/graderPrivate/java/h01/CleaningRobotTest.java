@@ -85,11 +85,12 @@ public class CleaningRobotTest extends RobotTest {
             World.getGlobalWorld().putCoins(cleaningRobot.getX(), cleaningRobot.getY(), initialCoinsOnField);
         }
 
-        Assertions2.call(
+        TestUtils.withMockedUtilsClass(
             () -> cleaningRobot.handleKeyInput(direction, shouldPutCoins, shouldPickCoins),
             context,
-            r -> "The Method handleInput threw an exception"
+            128
         );
+
         if (verifyMovement) {
             Assertions2.assertEquals(
                 expectedEndPosition,

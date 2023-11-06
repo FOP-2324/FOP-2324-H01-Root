@@ -70,10 +70,10 @@ public class Contaminant2Test extends ContaminantRobotTest {
             World.getGlobalWorld().putCoins(contaminant2.getX(), contaminant2.getY(), initialCoinsOnField);
         }
 
-        Assertions2.call(
+        TestUtils.withMockedUtilsClass(
             contaminant2::doMove,
             context,
-            r -> "The Method handleInput threw an exception"
+            128
         );
 
         if (verifyPowerStatus) {

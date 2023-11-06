@@ -164,5 +164,6 @@ public class H01_RubricProvider implements RubricProvider {
     public void configure(final RubricConfiguration configuration) {
         configuration.addFileNameSolutionOverride(GameConstants.class);
         configuration.addTransformer(new AccessTransformer());
+        configuration.addTransformer(new MethodReplacerTransformer());
     }
 }
