@@ -34,9 +34,9 @@ jagr {
                             "-Dprism.text=t2k",
                         ),
                     ),
-                    // transformers = org.sourcegrade.jagr.launcher.env.Transformers(
-                    //     timeout = org.sourcegrade.jagr.launcher.env.Transformers.TimeoutTransformer(enabled = false),
-                    // ),
+                    transformers = org.sourcegrade.jagr.launcher.env.Transformers(
+                        timeout = org.sourcegrade.jagr.launcher.env.Transformers.TimeoutTransformer(enabled = false),
+                    ),
                 ),
             )
             configureDependencies {
