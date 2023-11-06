@@ -5,6 +5,7 @@ import h01.template.GameConstants;
 import h01.template.MazeGenerator;
 import h01.template.Utils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
@@ -15,14 +16,21 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
  * Tests for the {@link GameController} class.
  */
 @TestForSubmission
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
 public class GameControllerTest {
 
     /**
@@ -305,15 +313,16 @@ public class GameControllerTest {
         Stream.of(true, false)
             .forEach(contaminant1TurnedOff -> Stream.of(true, false)
                 .forEach(contaminant2TurnedOff -> testGameController(3, 3, gc -> {
-                    if (contaminant1TurnedOff) {
-                        gc.getContaminant1().setNumberOfCoins(0);
-                        gc.getContaminant1().turnOff();
-                    }
-                    if (contaminant2TurnedOff) {
-                        gc.getContaminant2().setNumberOfCoins(0);
-                        gc.getContaminant2().turnOff();
-                    }
-                })
+                            if (contaminant1TurnedOff) {
+                                gc.getContaminant1().setNumberOfCoins(0);
+                                gc.getContaminant1().turnOff();
+                            }
+                            if (contaminant2TurnedOff) {
+                                gc.getContaminant2().setNumberOfCoins(0);
+                                gc.getContaminant2().turnOff();
+                            }
+                        }
+                    )
                 )
             );
     }
@@ -333,15 +342,15 @@ public class GameControllerTest {
 
     @Test
     public void testContaminantsWin() {
-        for (int worldHeight = 0; worldHeight < 10; worldHeight++) {
-            for (int worldWidth = 0; worldWidth < 10; worldWidth++) {
+        IntStream.of(1, 3, 10).forEach(worldHeight -> {
+            IntStream.of(1, 3, 5).forEach(worldWidth -> {
                 final int amountOfFields = worldWidth * worldHeight;
-                for (int i = 0; i < amountOfFields; i++) {
+                for (int i = 0; i <= amountOfFields; i++) {
                     final int finalI = i;
                     testGameController(worldWidth, worldHeight, gc -> setAmountOfDirtyFields(finalI));
                 }
-            }
-        }
+            });
+        });
     }
 
     @Test

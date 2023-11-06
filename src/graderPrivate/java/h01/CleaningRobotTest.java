@@ -4,6 +4,7 @@ import fopbot.Direction;
 import fopbot.World;
 import h01.template.GameConstants;
 import h01.template.Utils;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -15,11 +16,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Tests for the {@link CleaningRobot} class.
  */
 @TestForSubmission
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
 public class CleaningRobotTest extends RobotTest {
 
     /**
@@ -85,11 +92,12 @@ public class CleaningRobotTest extends RobotTest {
             World.getGlobalWorld().putCoins(cleaningRobot.getX(), cleaningRobot.getY(), initialCoinsOnField);
         }
 
-        Assertions2.call(
+        TestUtils.withMockedUtilsClass(
             () -> cleaningRobot.handleKeyInput(direction, shouldPutCoins, shouldPickCoins),
             context,
-            r -> "The Method handleInput threw an exception"
+            128
         );
+
         if (verifyMovement) {
             Assertions2.assertEquals(
                 expectedEndPosition,

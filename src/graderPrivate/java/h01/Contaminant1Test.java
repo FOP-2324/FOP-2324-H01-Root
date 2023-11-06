@@ -4,6 +4,7 @@ import fopbot.Direction;
 import fopbot.World;
 import h01.template.GameConstants;
 import h01.template.Utils;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -11,17 +12,23 @@ import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
 
 import java.awt.Point;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mockStatic;
 
 /**
  * Tests for the {@link Contaminant1} class.
  */
 @TestForSubmission
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
 public class Contaminant1Test extends ContaminantRobotTest {
 
     @Override
@@ -88,27 +95,26 @@ public class Contaminant1Test extends ContaminantRobotTest {
             World.getGlobalWorld().putCoins(contaminant1.getX(), contaminant1.getY(), initialCoinsOnField);
         }
 
-        try (final var utilsMock = mockStatic(Utils.class, CALLS_REAL_METHODS)) {
-            utilsMock.when(() -> Utils.getRandomInteger(anyInt(), anyInt())).thenAnswer(invocation -> {
-                final int min = invocation.getArgument(0);
-                final int max = invocation.getArgument(1);
+        TestUtils.withMockedUtilsClass(
+            (min, max) -> {
                 if (min == GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS && max == GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS) {
                     return shouldPlaceCoins;
                 }
                 return Utils.rnd.nextInt(max - min + 1) + min;
-            });
-            Assertions2.call(
-                contaminant1::doMove,
-                context,
-                r -> "The Method handleInput threw an exception"
-            );
-            if (verifyCoinAmount && !shouldTurnOff && initialRobotCoinAmount != 0) {
-                utilsMock.verify(() -> Utils.getRandomInteger(
-                    GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS,
-                    GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS
-                ), atLeastOnce().description(context.toString()));
-            }
-        }
+            },
+            mock -> {},
+            mock -> {
+                if (verifyCoinAmount && !shouldTurnOff && initialRobotCoinAmount != 0) {
+                    mock.verify(() -> Utils.getRandomInteger(
+                        GameConstants.CONTAMINANT_ONE_MIN_PUT_COINS,
+                        GameConstants.CONTAMINANT_ONE_MAX_PUT_COINS
+                    ), atLeastOnce().description(context.toString()));
+                }
+            },
+            contaminant1::doMove,
+            context,
+            128
+        );
 
         if (verifyPowerStatus) {
             verifyPowerStatus(shouldTurnOff, contaminant1, context);

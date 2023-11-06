@@ -2,6 +2,7 @@ package h01;
 
 import fopbot.Direction;
 import fopbot.World;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
@@ -13,11 +14,17 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Tests for the {@link Contaminant2} class.
  */
 @TestForSubmission
+@Timeout(
+    value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
+    unit = TimeUnit.SECONDS,
+    threadMode = Timeout.ThreadMode.SEPARATE_THREAD
+)
 public class Contaminant2Test extends ContaminantRobotTest {
 
     @Override
@@ -70,10 +77,10 @@ public class Contaminant2Test extends ContaminantRobotTest {
             World.getGlobalWorld().putCoins(contaminant2.getX(), contaminant2.getY(), initialCoinsOnField);
         }
 
-        Assertions2.call(
+        TestUtils.withMockedUtilsClass(
             contaminant2::doMove,
             context,
-            r -> "The Method handleInput threw an exception"
+            128
         );
 
         if (verifyPowerStatus) {
