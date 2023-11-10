@@ -16,7 +16,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -28,7 +27,6 @@ import java.util.stream.Stream;
 @TestForSubmission
 @Timeout(
     value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
-    unit = TimeUnit.SECONDS,
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
 public class GameControllerTest {
@@ -93,6 +91,8 @@ public class GameControllerTest {
         final boolean initialContaminant2TurnedOff = gc.getContaminant2().isTurnedOff();
 
         var context = makeContext(gc);
+
+        final var expectedWinner = getExpectedWinner(gc);
 
         // change system.out and system.err to a collector
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -160,7 +160,7 @@ public class GameControllerTest {
 
         // check winner
         Assertions2.assertEquals(
-            getExpectedWinner(gc),
+            expectedWinner,
             actualWinner,
             context,
             r -> "The winner is not correct"
@@ -220,11 +220,11 @@ public class GameControllerTest {
     }
 
     /**
-     * Returns the percentage of fields covered with coins.
+     * Returns the ratio of fields covered with coins. 0 means no fields are covered, 1.0 means all fields are covered.
      *
-     * @return The percentage of fields covered with coins.
+     * @return The ratio of fields covered with coins.
      */
-    private static double getPercentageOfDirtyFields() {
+    private static double getRatioOfCoveredFields() {
         int dirtyFields = 0;
         for (int y = 0; y < GameConstants.WORLD_HEIGHT; y++) {
             for (int x = 0; x < GameConstants.WORLD_WIDTH; x++) {
@@ -282,7 +282,7 @@ public class GameControllerTest {
             return Winner.CLEANING_ROBOT;
         }
         // if more than 50% of all fields are dirty, the game is lost
-        if (getPercentageOfDirtyFields() >= 0.5) {
+        if (getRatioOfCoveredFields() >= 0.5) {
             return Winner.CONTAMINANTS;
         }
 
@@ -303,7 +303,8 @@ public class GameControllerTest {
             .add("cleaningRobot", gc.getCleaningRobot())
             .add("contaminant1", gc.getContaminant1())
             .add("contaminant2", gc.getContaminant2())
-            .add("percentageOfCoveredFields", getPercentageOfDirtyFields())
+            .add("ratioOfCoveredFields", getRatioOfCoveredFields())
+            .add("numberOfCoinsInDumpingArea", getNumberOfCoinsInDumpingArea())
             .add("expectedWinner", getExpectedWinner(gc))
             .build();
     }
