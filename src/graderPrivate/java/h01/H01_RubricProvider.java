@@ -130,25 +130,25 @@ public class H01_RubricProvider implements RubricProvider {
                         "Der cleaner gewinnt, wenn alle Contaminants ausgeschaltet sind.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testCleaningRobotWinByEndurance"))
+                                "testCleaningRobotWinByEndurance", boolean.class, boolean.class))
                     ),
                     criterion(
                         "Der cleaner gewinnt, wenn sich in der Abladezone mindestens 200 Münzen befinden.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testCleaningRobotWinByDumpingArea"))
+                                "testCleaningRobotWinByDumpingArea", int.class))
                     ),
                     criterion(
                         "Die Contaminants gewinnen, wenn mindestens 50% der Felder mit münzen bedeckt sind.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testContaminantsWin"))
+                                "testContaminantsWin", int.class, int.class))
                     ),
                     criterion(
                         "Wenn beide Parteien gleichzeitig gewinnen, so gewinnt der cleaner.",
                         JUnitTestRef.ofMethod(
                             () -> GameControllerTest.class.getDeclaredMethod(
-                                "testContaminantsWin"))
+                                "testBothPartiesWin"))
                     )
                 )
                 .build()

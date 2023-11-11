@@ -7,6 +7,7 @@ import h01.template.Utils;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSet;
 import org.tudalgo.algoutils.tutor.general.json.JsonParameterSetTest;
@@ -29,6 +30,7 @@ import static org.mockito.Mockito.atLeastOnce;
     unit = TimeUnit.SECONDS,
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
+@SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
 public class Contaminant1Test extends ContaminantRobotTest {
 
     @Override

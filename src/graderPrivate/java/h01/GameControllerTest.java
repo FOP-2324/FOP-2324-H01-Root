@@ -6,7 +6,10 @@ import h01.template.MazeGenerator;
 import h01.template.Utils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junitpioneer.jupiter.cartesian.CartesianTest;
+import org.junitpioneer.jupiter.params.IntRangeSource;
 import org.sourcegrade.jagr.api.rubric.TestForSubmission;
+import org.tudalgo.algoutils.tutor.general.annotation.SkipAfterFirstFailedTest;
 import org.tudalgo.algoutils.tutor.general.assertions.Assertions2;
 import org.tudalgo.algoutils.tutor.general.assertions.Context;
 
@@ -19,8 +22,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /**
  * Tests for the {@link GameController} class.
@@ -28,9 +29,9 @@ import java.util.stream.Stream;
 @TestForSubmission
 @Timeout(
     value = TestConstants.TEST_TIMEOUT_IN_SECONDS,
-    unit = TimeUnit.SECONDS,
     threadMode = Timeout.ThreadMode.SEPARATE_THREAD
 )
+@SkipAfterFirstFailedTest(TestConstants.SKIP_AFTER_FIRST_FAILED_TEST)
 public class GameControllerTest {
 
     /**
@@ -93,6 +94,8 @@ public class GameControllerTest {
         final boolean initialContaminant2TurnedOff = gc.getContaminant2().isTurnedOff();
 
         var context = makeContext(gc);
+
+        final var expectedWinner = getExpectedWinner(gc);
 
         // change system.out and system.err to a collector
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -160,7 +163,7 @@ public class GameControllerTest {
 
         // check winner
         Assertions2.assertEquals(
-            getExpectedWinner(gc),
+            expectedWinner,
             actualWinner,
             context,
             r -> "The winner is not correct"
@@ -220,11 +223,11 @@ public class GameControllerTest {
     }
 
     /**
-     * Returns the percentage of fields covered with coins.
+     * Returns the ratio of fields covered with coins. 0 means no fields are covered, 1.0 means all fields are covered.
      *
-     * @return The percentage of fields covered with coins.
+     * @return The ratio of fields covered with coins.
      */
-    private static double getPercentageOfDirtyFields() {
+    private static double getRatioOfCoveredFields() {
         int dirtyFields = 0;
         for (int y = 0; y < GameConstants.WORLD_HEIGHT; y++) {
             for (int x = 0; x < GameConstants.WORLD_WIDTH; x++) {
@@ -282,7 +285,7 @@ public class GameControllerTest {
             return Winner.CLEANING_ROBOT;
         }
         // if more than 50% of all fields are dirty, the game is lost
-        if (getPercentageOfDirtyFields() >= 0.5) {
+        if (getRatioOfCoveredFields() >= 0.5) {
             return Winner.CONTAMINANTS;
         }
 
@@ -303,54 +306,68 @@ public class GameControllerTest {
             .add("cleaningRobot", gc.getCleaningRobot())
             .add("contaminant1", gc.getContaminant1())
             .add("contaminant2", gc.getContaminant2())
-            .add("percentageOfCoveredFields", getPercentageOfDirtyFields())
+            .add("ratioOfCoveredFields", getRatioOfCoveredFields())
+            .add("numberOfCoinsInDumpingArea", getNumberOfCoinsInDumpingArea())
             .add("expectedWinner", getExpectedWinner(gc))
             .build();
     }
 
-    @Test
-    public void testCleaningRobotWinByEndurance() {
-        Stream.of(true, false)
-            .forEach(contaminant1TurnedOff -> Stream.of(true, false)
-                .forEach(contaminant2TurnedOff -> testGameController(3, 3, gc -> {
-                            if (contaminant1TurnedOff) {
-                                gc.getContaminant1().setNumberOfCoins(0);
-                                gc.getContaminant1().turnOff();
-                            }
-                            if (contaminant2TurnedOff) {
-                                gc.getContaminant2().setNumberOfCoins(0);
-                                gc.getContaminant2().turnOff();
-                            }
-                        }
-                    )
-                )
-            );
-    }
-
-    @Test
-    public void testCleaningRobotWinByDumpingArea(
+    /**
+     * Tests the {@link GameController#checkWinCondition()} method.
+     *
+     * @param contaminant1TurnedOff Whether the contaminant 1 is turned off.
+     * @param contaminant2TurnedOff Whether the contaminant 2 is turned off.
+     */
+    @CartesianTest(name = "[{index}] contaminant1TurnedOff={0}, contaminant2TurnedOff={1}")
+    public void testCleaningRobotWinByEndurance(
+        @CartesianTest.Values(booleans = {true, false}) final boolean contaminant1TurnedOff,
+        @CartesianTest.Values(booleans = {true, false}) final boolean contaminant2TurnedOff
     ) {
-        for (int coinsInDumpingArea = 0; coinsInDumpingArea <= 300; coinsInDumpingArea += 50) {
-            final int finalCoinsInDumpingArea = coinsInDumpingArea;
-            testGameController(3, 3, gc -> {
-                if (finalCoinsInDumpingArea > 0) {
-                    World.getGlobalWorld().putCoins(0, World.getHeight() - 1, finalCoinsInDumpingArea);
+        testGameController(3, 3, gc -> {
+                if (contaminant1TurnedOff) {
+                    gc.getContaminant1().setNumberOfCoins(0);
+                    gc.getContaminant1().turnOff();
                 }
-            });
-        }
+                if (contaminant2TurnedOff) {
+                    gc.getContaminant2().setNumberOfCoins(0);
+                    gc.getContaminant2().turnOff();
+                }
+            }
+        );
     }
 
-    @Test
-    public void testContaminantsWin() {
-        IntStream.of(1, 3, 10).forEach(worldHeight -> {
-            IntStream.of(1, 3, 5).forEach(worldWidth -> {
-                final int amountOfFields = worldWidth * worldHeight;
-                for (int i = 0; i <= amountOfFields; i++) {
-                    final int finalI = i;
-                    testGameController(worldWidth, worldHeight, gc -> setAmountOfDirtyFields(finalI));
-                }
-            });
+    /**
+     * Tests that the cleaning robot wins if the dumping area contains at least 200 coins.
+     *
+     * @param coinsInDumpingArea The number of coins in the dumping area.
+     */
+    @CartesianTest(name = "[{index}] coinsInDumpingArea={0}")
+    public void testCleaningRobotWinByDumpingArea(
+        @IntRangeSource(from = 0, to = 300, step = 50, closed = true) final int coinsInDumpingArea
+    ) {
+        testGameController(3, 3, gc -> {
+            if (coinsInDumpingArea > 0) {
+                World.getGlobalWorld().putCoins(0, World.getHeight() - 1, coinsInDumpingArea);
+            }
         });
+    }
+
+    /**
+     * Tests that the contaminants win if at least 50% of all fields are dirty.
+     *
+     * @param worldWidth  The width of the world.
+     * @param worldHeight The height of the world.
+     */
+    @CartesianTest(name = "[{index}] worldWidth={0}, worldHeight={1}")
+    public void testContaminantsWin(
+        @CartesianTest.Values(ints = {1, 3, 5}) final int worldWidth,
+        @CartesianTest.Values(ints = {1, 3, 10}) final int worldHeight
+    ) {
+        final int amountOfFields = worldWidth * worldHeight;
+        for (int i = 0; i <= amountOfFields; i++) {
+            final int finalI = i;
+            testGameController(worldWidth, worldHeight, gc -> setAmountOfDirtyFields(finalI));
+        }
     }
 
     @Test
